@@ -155,17 +155,19 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
       <>
         <Head>
           <title>
-            {category ? `Category - ${category.name}` : `All ${pluralTextModel || 'Performers'}`}
+            {category ? `Category - ${category.name}` : `Our  ${'Therapists' || 'Performers'}`}
+            {/* {category ? `Category - ${category.name}` : `All ${pluralTextModel || 'Performers'}`} */}
           </title>
         </Head>
         <PageBanner
-          pageTitle="All Models"
+          pageTitle="Our Therapists"
           homePageUrl="/"
           homePageText="Home"
-          activePageText="All Models"
+          activePageText="Our Therapists"
           imgClass="bg-4"
         />
-        <PageHeader title={category ? category.name : `All ${pluralTextModel || 'Performers'}`} />
+        <PageHeader title={category ? category.name : `Our ${'Therapists' || 'Performers'}`} />
+        {/* <PageHeader title={category ? category.name : `All ${pluralTextModel || 'Performers'}`} /> */}
         <div className="">
           <PerformerGrid
             {...this.props}

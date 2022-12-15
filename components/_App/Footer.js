@@ -77,9 +77,9 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/list-of-issues">
+                                        <Link href="/mental-health-conditions">
                                             <a>
-                                                Issues and solutions
+                                                Mental Health Conditions
                                             </a>
                                         </Link>
                                     </li>

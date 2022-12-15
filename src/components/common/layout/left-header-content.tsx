@@ -105,6 +105,17 @@ const LeftHeaderContent = ({
         </Link>
       </NavItem>
       <NavItem
+        key="allModel"
+        onClick={() => {
+          setSelectedKey('model');
+        }}
+        aria-hidden="true"
+      >
+        <Link href="/performer-category" as="/our-therapists">
+          <a>Our Therapists</a>
+        </Link>
+      </NavItem>
+      {/* <NavItem
         key="livecam"
         onClick={() => {
           setSelectedKey('LiveCam');
@@ -114,7 +125,7 @@ const LeftHeaderContent = ({
         <Link href="/livecam" shallow>
           <a>Our Therapists</a>
         </Link>
-      </NavItem>
+      </NavItem> */}
       <NavItem
         key="aboutus"
         onClick={() => {
@@ -138,23 +149,13 @@ const LeftHeaderContent = ({
         </Link>
       </NavItem>
       {performerCategories.data.length > 0 && (
-      <Dropdown overlay={CategorySubMenu} overlayClassName="cate-sub-menu-overlay">
-        <NavItem>
-          <span>Categories</span>
-        </NavItem>
-      </Dropdown>
+        <Dropdown overlay={CategorySubMenu} overlayClassName="cate-sub-menu-overlay">
+          <NavItem>
+            <span>Categories</span>
+          </NavItem>
+        </Dropdown>
       )}
-      <NavItem
-        key="allModel"
-        onClick={() => {
-          setSelectedKey('model');
-        }}
-        aria-hidden="true"
-      >
-        <Link href="/performer-category" as="/all-models">
-          <a>{`All ${pluralTextModel || 'Models'}`}</a>
-        </Link>
-      </NavItem>
+
       {loggedIn && currentUser?._id && currentUser?.role === 'performer' && (
         <>
           <NavItem
