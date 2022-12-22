@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/performer-category": "pages/performer-category.js",
-  "/contact-us": "pages/contact-us.js"
+  "/": "pages/index.js",
+  "/account/user/funds-tokens": "pages/account/user/funds-tokens.js"
 }

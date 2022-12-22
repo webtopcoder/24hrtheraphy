@@ -58,6 +58,8 @@ export const ROLE = {
   USER: 'user'
 };
 function redirectLogin(ctx: NextPageContext, authenticate: boolean | string) {
+
+  console.log(process.browser)
   if (process.browser) {
     authService.removeToken();
     authService.removeRemember();

@@ -32,5 +32,11 @@
       "id": "./node_modules/react-number-format/dist/react-number-format.es.js",
       "file": "static/chunks/2.js"
     }
+  ],
+  "react-owl-carousel3": [
+    {
+      "id": "./node_modules/react-owl-carousel3/lib/OwlCarousel.js",
+      "file": "static/chunks/3.js"
+    }
   ]
 }

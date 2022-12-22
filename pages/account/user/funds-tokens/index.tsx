@@ -68,6 +68,7 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
   async buyToken(tokenPackage: ITokenPackage) {
     try {
       this.setState({ buying: tokenPackage._id });
+      console.log(tokenPackage._id);
       const resp = await tokenPackageService.buyTokens(tokenPackage._id);
       if (resp.data) {
         if (isUrl(resp.data.paymentUrl)) {
