@@ -14,15 +14,20 @@ interface IPaypalPaymentProps {
   amount: string | number;
 }
 
-const config = getGlobalConfig();
-const PAYPAL_CLIENT_ID = config.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-
 export default function PaypalPayment({ amount }: IPaypalPaymentProps) {
+  const config = getGlobalConfig();
+  const PAYPAL_CLIENT_ID = config.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const [clientToken, setClientToken] = useState<string>();
 
   useEffect(() => {
-    getPaypalClientToken().then(setClientToken).catch(console.error);
-  }, []);
+    const controller = new AbortController();
+    getPaypalClientToken(controller.signal)
+      .then((clientToken) => setClientToken(clientToken))
+      .catch(console.error);
+    return () => {
+      controller.abort();
+    };
+  }, [getPaypalClientToken]);
 
   if (!clientToken) return null;
 

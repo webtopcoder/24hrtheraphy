@@ -6,6 +6,7 @@ import PageHeader from '@components/common/layout/page-header';
 import Head from 'next/head';
 import Loader from 'src/components/common/base/loader';
 import TokenCard from 'src/components/common/base/token-card';
+import PaypalPayment from 'src/components/paypal/PaypalPayment';
 import React, { PureComponent } from 'react';
 import './index.less';
 import { getResponseError } from 'src/lib/utils';
@@ -113,7 +114,9 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
                     </Col>
                   ))
                 ) : (
-                  'There is no data'
+                  <>
+                  <PaypalPayment amount={100} />
+                  </>
                 )}
               </Row>
             </div>

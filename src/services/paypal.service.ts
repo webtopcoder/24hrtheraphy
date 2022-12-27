@@ -5,13 +5,11 @@ interface IPaypalCheckoutRequest {
   nonce: string;
 }
 
-const config = getGlobalConfig();
-const BASE_URL = config.NEXT_PUBLIC_API_ENDPOINT;
-
-export async function paypalCheckoutRequest({
-  nonce,
-  amount,
-}: IPaypalCheckoutRequest) {
+export async function paypalCheckoutRequest(
+  { nonce, amount }: IPaypalCheckoutRequest,
+  signal?: AbortSignal
+) {
+  const BASE_URL = getGlobalConfig().NEXT_PUBLIC_API_ENDPOINT;
   const transaction = await (
     await fetch(`${BASE_URL}/paypal/checkout`, {
       method: "POST",
@@ -22,13 +20,15 @@ export async function paypalCheckoutRequest({
         nonce,
         amount,
       }),
+      signal,
     })
   ).json();
   return transaction;
 }
 
-export async function getPaypalClientToken() {
-  const request = await fetch(`${BASE_URL}/paypal/client_token`);
+export async function getPaypalClientToken(signal?: AbortSignal) {
+  const BASE_URL = getGlobalConfig().NEXT_PUBLIC_API_ENDPOINT;
+  const request = await fetch(`${BASE_URL}/paypal/client_token`, { signal });
   const response = await request.json();
   return response.clientToken;
 }
