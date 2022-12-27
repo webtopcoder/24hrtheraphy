@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.153",
-    "@types/node": "^13.9.3",
+    "@types/node": "^18.11.18",
     "@types/react": "^16.9.25",
     "@types/react-google-recaptcha": "^2.1.0",
     "@types/video.js": "^7.3.17",
