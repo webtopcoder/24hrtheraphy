@@ -14,7 +14,7 @@ import { tokenPackageService } from '@services/token-package.service';
 import { ITokenPackage } from 'src/interfaces';
 import { buyTokenSuccess } from 'src/redux/user/actions';
 import { connect } from 'react-redux';
-import { isUrl } from '@lib/string';
+import { paypalRequestService } from '@services/paypal.service';
 
 interface IProps {
   buyTokenSuccess: Function;
@@ -66,26 +66,6 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
     }
   }
 
-  async buyToken(tokenPackage: ITokenPackage) {
-    try {
-      this.setState({ buying: tokenPackage._id });
-      console.log(tokenPackage._id);
-      const resp = await tokenPackageService.buyTokens(tokenPackage._id);
-      if (resp.data) {
-        if (isUrl(resp.data.paymentUrl)) {
-          window.open(resp.data.paymentUrl);
-        }
-        // message.success('Buy token success');
-        // this.props.buyTokenSuccess(tokenPackage.tokens);
-      }
-    } catch (e) {
-      const error = await Promise.resolve(e);
-      message.error(getResponseError(error));
-    } finally {
-      this.setState({ buying: null });
-    }
-  }
-
   render() {
     const { fetching, tokens, buying } = this.state;
     return (
@@ -108,15 +88,17 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
                         token={item.tokens}
                         price={item.price}
                         description={item.description}
-                        onBuyToken={() => this.buyToken(item)}
+                        onBuyToken={() => {}}
                         buying={item._id === buying}
                       />
+                    <PaypalPayment onApprove={async (tokenizedData) => {
+                      const { nonce } = tokenizedData;
+                      await paypalRequestService.purchaseToken({ nonce, tokenId: item._id  });
+                    }} amount={item.price} />
                     </Col>
                   ))
                 ) : (
-                  <>
-                  <PaypalPayment amount={100} />
-                  </>
+                  'There is no data'
                 )}
               </Row>
             </div>

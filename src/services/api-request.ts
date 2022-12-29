@@ -70,7 +70,8 @@ export abstract class APIRequest {
     url: string,
     method?: string,
     body?: any,
-    headers?: { [key: string]: string }
+    headers?: { [key: string]: string },
+    signal?: AbortSignal
   ): Promise<IResponse<any>> {
     const verb = (method || 'get').toUpperCase();
     const updatedHeader = {
@@ -85,7 +86,8 @@ export abstract class APIRequest {
     return fetch(isUrl(url) ? url : `${config.API_ENDPOINT || config.NEXT_PUBLIC_API_ENDPOINT}${url}`, {
       method: verb,
       headers: updatedHeader,
-      body: body ? JSON.stringify(body) : null
+      body: body ? JSON.stringify(body) : null,
+      signal
     })
       .then(this.checkStatus)
       .then(this.parseJSON);
@@ -102,12 +104,12 @@ export abstract class APIRequest {
     return `${baseUrl}?${queryString}`;
   }
 
-  get(url: string, headers?: { [key: string]: string }) {
-    return this.request(url, 'get', null, headers);
+  get(url: string, headers?: { [key: string]: string }, signal?: AbortSignal) {
+    return this.request(url, 'get', null, headers, signal);
   }
 
-  post(url: string, data?: any, headers?: { [key: string]: string }) {
-    return this.request(url, 'post', data, headers);
+  post(url: string, data?: any, headers?: { [key: string]: string }, signal?: AbortSignal) {
+    return this.request(url, 'post', data, headers, signal);
   }
 
   put(url: string, data?: any, headers?: { [key: string]: string }) {

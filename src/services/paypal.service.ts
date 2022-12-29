@@ -1,34 +1,27 @@
-import { getGlobalConfig } from "@services/config";
+import { APIRequest } from "./api-request";
 
 interface IPaypalCheckoutRequest {
-  amount: string | number;
   nonce: string;
+  tokenId: string;
 }
 
-export async function paypalCheckoutRequest(
-  { nonce, amount }: IPaypalCheckoutRequest,
-  signal?: AbortSignal
-) {
-  const BASE_URL = getGlobalConfig().NEXT_PUBLIC_API_ENDPOINT;
-  const transaction = await (
-    await fetch(`${BASE_URL}/paypal/checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nonce,
-        amount,
-      }),
-      signal,
-    })
-  ).json();
-  return transaction;
+class PaypalRequestService extends APIRequest {
+  async purchaseToken(
+    { nonce, tokenId }: IPaypalCheckoutRequest,
+    signal?: AbortSignal
+  ) {
+    return this.post(
+      `/paypal/checkout/token/${tokenId}`,
+      { nonce },
+      {},
+      signal
+    );
+  }
+
+  async getPaypalClientToken(signal?: AbortSignal) {
+    const response = await this.get(`/paypal/client_token`, {}, signal);
+    return response.data.clientToken;
+  }
 }
 
-export async function getPaypalClientToken(signal?: AbortSignal) {
-  const BASE_URL = getGlobalConfig().NEXT_PUBLIC_API_ENDPOINT;
-  const request = await fetch(`${BASE_URL}/paypal/client_token`, { signal });
-  const response = await request.json();
-  return response.clientToken;
-}
+export const paypalRequestService = new PaypalRequestService();
