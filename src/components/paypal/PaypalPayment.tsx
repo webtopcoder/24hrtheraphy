@@ -1,3 +1,4 @@
+import Loader from "@components/common/base/loader";
 import {
   PayPalScriptProvider,
   BraintreePayPalButtons,
@@ -40,7 +41,7 @@ export default function PaypalPayment({
     };
   }, []);
 
-  if (!clientToken) return null;
+  if (!clientToken) return <Loader spinning={true} />;
 
   return (
     <PayPalScriptProvider
