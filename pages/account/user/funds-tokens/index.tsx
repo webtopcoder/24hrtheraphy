@@ -22,6 +22,7 @@ interface IStates {
   fetching: boolean;
   buying: string;
   open: boolean;
+  selectedToken?: ITokenPackage;
 }
 
 class UserTokensPage extends PureComponent<IProps, IStates> {
@@ -67,7 +68,7 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
   }
 
   render() {
-    const { fetching, tokens, buying, open } = this.state;
+    const { fetching, tokens, buying, open, selectedToken } = this.state;
     return (
       <>
         <Head>
@@ -89,36 +90,42 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
                         price={item.price}
                         description={item.description}
                         onBuyToken={() => {
+                          this.setState({ selectedToken: item });
                           this.setState({ open: true });
                         }}
                         buying={item._id === buying}
                       />
-                      <Modal
-                        visible={open}
-                        title="Buy Now"
-                        onCancel={() => {
-                          this.setState({ open: false });
-                        }}
-                        footer={[]}
-                      >
-                        <PaypalPayment
-                          onApprove={async (tokenizedData) => {
-                            const { nonce } = tokenizedData;
-                            this.setState({ open: false });
-                            await paypalRequestService.purchaseToken({
-                              nonce,
-                              tokenId: item._id,
-                            });
-                          }}
-                          amount={item.price}
-                        />
-                      </Modal>
                     </Col>
                   ))
                 ) : (
                   "There is no data"
                 )}
               </Row>
+              <Modal
+                visible={open}
+                title="Buy Now"
+                onCancel={() => {
+                  this.setState({ open: false });
+                }}
+                footer={[]}
+              >
+                {selectedToken ? (
+                  <PaypalPayment
+                    onApprove={async (tokenizedData) => {
+                      const { nonce } = tokenizedData;
+                      this.setState({ open: false });
+                      await paypalRequestService.purchaseToken({
+                        nonce,
+                        tokenId: selectedToken._id,
+                      });
+                    }}
+                    amount={selectedToken.price}
+                    forceReRender={[selectedToken]}
+                  />
+                ) : (
+                  "No selected token"
+                )}
+              </Modal>
             </div>
           </div>
         </div>
