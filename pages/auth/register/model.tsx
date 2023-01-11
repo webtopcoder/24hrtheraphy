@@ -12,6 +12,7 @@ import { settingService } from "@services/setting.service";
 import { getResponseError } from "@lib/utils";
 import moment from "moment";
 import { FormRegisterPlaceHolder } from "@components/common/layout";
+import PageBanner from "components/Common/PageBanner";
 
 interface PerformerRegisterProps {
   performerRegister(data: IRegisterFormData): Function;
@@ -97,22 +98,37 @@ class PerformerRegisterPage extends PureComponent<
         <Head>
           <title>{ui?.singularTextModel || "Performer"} Register</title>
         </Head>
-        <div className="register-page">
-          <div className="form-register-container">
-            {errorMessage && (
-              <Alert type="error" message="Error request" banner />
-            )}
-            <RegisterForm
-              singularTextModel={ui?.singularTextModel || "Performer"}
-              onFinish={this.onFinish.bind(this)}
-              submiting={submiting}
-              countries={countries}
-              error={error}
-              googleReCaptchaEnabled={ui.googleReCaptchaEnabled}
-              googleReCaptchaSiteKey={ui.googleReCaptchaSiteKey}
-            />
+        <PageBanner
+          pageTitle="Sign Up"
+          homePageUrl="/"
+          homePageText="Home"
+          activePageText="Sign Up"
+          imgClass="bg-1"
+        />
+        <div className="user-area-all-style log-in-area ptb-100">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-6">
+                <div className="contact-form-action">
+                  {errorMessage && (
+                    <Alert type="error" message="Error request" banner />
+                  )}
+                  <RegisterForm
+                    singularTextModel={ui?.singularTextModel || "Performer"}
+                    onFinish={this.onFinish.bind(this)}
+                    submiting={submiting}
+                    countries={countries}
+                    error={error}
+                    googleReCaptchaEnabled={ui.googleReCaptchaEnabled}
+                    googleReCaptchaSiteKey={ui.googleReCaptchaSiteKey}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="sign-in-img"></div>
+              </div>
+            </div>
           </div>
-          <FormRegisterPlaceHolder ui={ui} />
         </div>
       </>
     );

@@ -6,6 +6,7 @@ import Head from "next/head";
 import { performerlogin, resetLoginData } from "@redux/auth/actions";
 import { ILogin, IUIConfig } from "src/interfaces";
 import { FormRegisterPlaceHolder } from "@components/common/layout";
+import PageBanner from "components/Common/PageBanner";
 
 interface IProps {
   requesting: boolean;
@@ -44,21 +45,38 @@ class Login extends PureComponent<IProps> {
         <Head>
           <title>{ui?.singularTextModel || "Performer"} Sign-in</title>
         </Head>
-        <div className="register-page" style={{}}>
-          <div className="form-register-container">
-            <FormLogin
-              requesting={requesting}
-              submit={this.submit.bind(this)}
-              error={error}
-              onRemember={(value) => {
-                this.rememberMe = value;
-              }}
-              success={success}
-              googleReCaptchaEnabled={ui.googleReCaptchaEnabled}
-              googleReCaptchaSiteKey={ui.googleReCaptchaSiteKey}
-            />
+        <PageBanner
+          pageTitle="Sign In"
+          homePageUrl="/"
+          homePageText="Home"
+          activePageText="Sign In"
+          imgClass="bg-1"
+        />
+
+        <div className="user-area-all-style log-in-area ptb-100">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-6">
+                <div className="contact-form-action">
+                  <FormLogin
+                    requesting={requesting}
+                    submit={this.submit.bind(this)}
+                    error={error}
+                    onRemember={(value) => {
+                      this.rememberMe = value;
+                    }}
+                    success={success}
+                    googleReCaptchaEnabled={ui.googleReCaptchaEnabled}
+                    googleReCaptchaSiteKey={ui.googleReCaptchaSiteKey}
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-6">
+                <div className="sign-in-img"></div>
+              </div>
+            </div>
           </div>
-          <FormRegisterPlaceHolder ui={ui} />
         </div>
       </>
     );
