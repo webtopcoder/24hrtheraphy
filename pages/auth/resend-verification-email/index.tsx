@@ -22,7 +22,7 @@ interface S {
 }
 
 class ResendVeryficationEmail extends PureComponent<P, S> {
-  static layout: string = 'auth';
+  static layout = 'auth';
 
   constructor(props: P) {
     super(props);

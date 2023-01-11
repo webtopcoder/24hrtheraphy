@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 const NumberFormatNoSSR = dynamic(() => import('react-number-format'), {
   ssr: false
 });
-interface P extends NumberFormatProps {}
+type P = NumberFormatProps
 export default function NumberFormat({ decimalScale, ...props }: P) {
   return (
     <NumberFormatNoSSR

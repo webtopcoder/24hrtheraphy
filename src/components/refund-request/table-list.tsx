@@ -47,14 +47,14 @@ export const RefundRequestTable = ({
     {
       title: 'Tokens',
       dataIndex: 'token',
-      align: 'center' as 'center',
+      align: 'center' as const,
       render(data) {
         return <span>{data}</span>;
       }
     },
     {
       title: 'Order Number',
-      align: 'center' as 'center',
+      align: 'center' as const,
       render: (record) => (record?.orderInfo?.orderNumber || 'N/A')
     },
     {

@@ -18,7 +18,7 @@ export const STUDIO_ROLE = 'studio';
 export const SORT = { descend: 'desc', ascend: 'asc' };
 
 export abstract class APIRequest {
-  static token: string = '';
+  static token = '';
 
   setAuthHeaderToken(token: string) {
     APIRequest.token = token;

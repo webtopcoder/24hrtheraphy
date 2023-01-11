@@ -21,9 +21,9 @@ interface IStates {
 }
 
 class ForgotPasswordPage extends PureComponent<IProps, IStates> {
-  static layout: string = 'auth';
+  static layout = 'auth';
 
-  static authenticate: boolean = false;
+  static authenticate = false;
 
   constructor(props: IProps) {
     super(props);

@@ -7,7 +7,7 @@ import { getResponseError } from '@lib/utils';
 import { performerService } from '@services/perfomer.service';
 
 interface P {
-  loggedIn: Boolean;
+  loggedIn: boolean;
   members: Array<IUser>;
   currentPerformer: IPerformer;
   placeholderAvatarUrl: string;

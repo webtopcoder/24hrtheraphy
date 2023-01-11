@@ -21,9 +21,9 @@ interface IProps {
 interface IStates {}
 
 class StudioLoginPage extends PureComponent<IProps, IStates> {
-  static layout: string = 'auth';
+  static layout = 'auth';
 
-  static authenticate: boolean = false;
+  static authenticate = false;
 
   rememberMe = false;
 

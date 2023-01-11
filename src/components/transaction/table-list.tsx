@@ -46,7 +46,7 @@ export const TransactionHistoryTable = ({
       title: 'Price',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
-      align: 'center' as 'center',
+      align: 'center' as const,
       sorter: true,
       render: (totalPrice: number) => totalPrice?.toFixed(2) || 'N/A'
     },

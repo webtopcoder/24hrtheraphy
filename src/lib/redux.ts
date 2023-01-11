@@ -70,7 +70,7 @@ function createReducers(
   stateContext: string,
   reducers: any[],
   initialState: any,
-  preventResetting: boolean = false
+  preventResetting = false
 ): any {
   return {
     [stateContext]: handleReduxActions(
