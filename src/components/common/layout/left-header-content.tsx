@@ -1,21 +1,21 @@
-import React from 'react';
-import { Menu, Dropdown } from 'antd';
-import Link from 'next/link';
-import { connect } from 'react-redux';
-import { updateUIValue } from 'src/redux/ui/actions';
+import React from "react";
+import { Menu, Dropdown } from "antd";
+import Link from "next/link";
+import { connect } from "react-redux";
+import { updateUIValue } from "src/redux/ui/actions";
 import {
   IPerformerCategogies,
   IDataResponse,
   IPerformer,
   IStudio,
   IUser,
-  StreamSettings
-} from 'src/interfaces';
-import './left-header-content.less';
-import { SETTING_KEYS } from 'src/constants';
-import classnames from 'classnames';
-import { MoreOutlined } from '@ant-design/icons';
-import { NavBar, NavItem } from '@components/common/base/nav';
+  StreamSettings,
+} from "src/interfaces";
+import "./left-header-content.less";
+import { SETTING_KEYS } from "src/constants";
+import classnames from "classnames";
+import { MoreOutlined } from "@ant-design/icons";
+import { NavBar, NavItem } from "@components/common/base/nav";
 
 interface Props {
   loggedIn?: boolean;
@@ -30,29 +30,30 @@ const LeftHeaderContent = ({
   currentUser,
   pluralTextModel,
   performerCategories,
-  settings
+  settings,
 }: Props) => {
-  const [selectedKey, setSelectedKey] = React.useState('');
-  const path = settings[SETTING_KEYS.OPTION_FOR_GROUP] === 'webrtc' ? 'webrtc/' : '';
+  const [selectedKey, setSelectedKey] = React.useState("");
+  const path =
+    settings[SETTING_KEYS.OPTION_FOR_GROUP] === "webrtc" ? "webrtc/" : "";
   const CategorySubMenu = (
-    <Menu mode="inline" style={{ display: 'flex', flexWrap: 'wrap' }}>
-      {performerCategories.data.length > 0
-        && performerCategories.data.map((category: IPerformerCategogies) => (
+    <Menu mode="inline" style={{ display: "flex", flexWrap: "wrap" }}>
+      {performerCategories.data.length > 0 &&
+        performerCategories.data.map((category: IPerformerCategogies) => (
           <Menu.Item
             key={`category-${category._id}`}
             onClick={() => {
-              setSelectedKey('');
+              setSelectedKey("");
             }}
           >
             <Link
               href={{
-                pathname: '/performer-category',
+                pathname: "/our-therapists",
                 query: {
                   slug: category.slug,
-                  category: JSON.stringify(category)
-                }
+                  category: JSON.stringify(category),
+                },
               }}
-              as={`/performer-category/${category.slug}`}
+              as={`/our-therapists/${category.slug}`}
             >
               <a>{category.name}</a>
             </Link>
@@ -65,7 +66,7 @@ const LeftHeaderContent = ({
     <Menu>
       <Menu.Item
         onClick={() => {
-          setSelectedKey('');
+          setSelectedKey("");
         }}
       >
         <Link href="/live">
@@ -85,7 +86,7 @@ const LeftHeaderContent = ({
       <NavItem
         key="home"
         onClick={() => {
-          setSelectedKey('home');
+          setSelectedKey("home");
         }}
         aria-hidden="true"
       >
@@ -96,7 +97,7 @@ const LeftHeaderContent = ({
       <NavItem
         key="how it works"
         onClick={() => {
-          setSelectedKey('howitworks');
+          setSelectedKey("howitworks");
         }}
         aria-hidden="true"
       >
@@ -107,11 +108,11 @@ const LeftHeaderContent = ({
       <NavItem
         key="allModel"
         onClick={() => {
-          setSelectedKey('model');
+          setSelectedKey("model");
         }}
         aria-hidden="true"
       >
-        <Link href="/performer-category" as="/our-therapists">
+        <Link href="/our-therapists" as="/our-therapists">
           <a>Our Therapists</a>
         </Link>
       </NavItem>
@@ -129,7 +130,7 @@ const LeftHeaderContent = ({
       <NavItem
         key="aboutus"
         onClick={() => {
-          setSelectedKey('AboutUs');
+          setSelectedKey("AboutUs");
         }}
         aria-hidden="true"
       >
@@ -140,7 +141,7 @@ const LeftHeaderContent = ({
       <NavItem
         key="contactus"
         onClick={() => {
-          setSelectedKey('contactUS');
+          setSelectedKey("contactUS");
         }}
         aria-hidden="true"
       >
@@ -149,20 +150,23 @@ const LeftHeaderContent = ({
         </Link>
       </NavItem>
       {performerCategories.data.length > 0 && (
-        <Dropdown overlay={CategorySubMenu} overlayClassName="cate-sub-menu-overlay">
+        <Dropdown
+          overlay={CategorySubMenu}
+          overlayClassName="cate-sub-menu-overlay"
+        >
           <NavItem>
             <span>Categories</span>
           </NavItem>
         </Dropdown>
       )}
 
-      {loggedIn && currentUser?._id && currentUser?.role === 'performer' && (
+      {loggedIn && currentUser?._id && currentUser?.role === "performer" && (
         <>
           <NavItem
             key="live"
-            className={classnames('hidden-sm', {})}
+            className={classnames("hidden-sm", {})}
             onClick={() => {
-              setSelectedKey('live');
+              setSelectedKey("live");
             }}
             aria-hidden="true"
           >
@@ -172,9 +176,9 @@ const LeftHeaderContent = ({
           </NavItem>
           <NavItem
             key="groupchat"
-            className={classnames('hidden-sm', {})}
+            className={classnames("hidden-sm", {})}
             onClick={() => {
-              setSelectedKey('groupchat');
+              setSelectedKey("groupchat");
             }}
             aria-hidden="true"
           >
@@ -197,16 +201,16 @@ LeftHeaderContent.defaultProps = {
   loggedIn: false,
   currentUser: null,
   settings: null,
-  pluralTextModel: '',
+  pluralTextModel: "",
   performerCategories: {
     total: 0,
-    data: []
-  }
+    data: [],
+  },
 };
 const mapStateToProps = (state) => ({
   loggedIn: state.auth.loggedIn,
   ...state.performer.performers,
-  ...state.ui
+  ...state.ui,
 });
 const mapDispatch = { updateUIValue };
 export default connect(mapStateToProps, mapDispatch)(LeftHeaderContent);
