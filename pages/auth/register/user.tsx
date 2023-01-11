@@ -1,17 +1,17 @@
-import '../index.less';
-import { PureComponent } from 'react';
-import { message, Alert } from 'antd';
-import { connect } from 'react-redux';
-import Head from 'next/head';
-import RegisterForm from '@components/auth/register/user-register-form';
-import PageBanner from '../../../components/Common/PageBanner';
-import { IUserRegisterFormData, ICountries, IUIConfig } from 'src/interfaces';
-import { userRegister } from '@redux/auth/actions';
-import Router from 'next/router';
-import { settingService } from '@services/setting.service';
-import { getResponseError } from '@lib/utils';
-import moment from 'moment';
-import { FormRegisterPlaceHolder } from '@components/common/layout';
+import "../index.less";
+import { PureComponent } from "react";
+import { message, Alert } from "antd";
+import { connect } from "react-redux";
+import Head from "next/head";
+import RegisterForm from "@components/auth/register/user-register-form";
+import PageBanner from "../../../components/Common/PageBanner";
+import { IUserRegisterFormData, ICountries, IUIConfig } from "src/interfaces";
+import { userRegister } from "@redux/auth/actions";
+import Router from "next/router";
+import { settingService } from "@services/setting.service";
+import { getResponseError } from "@lib/utils";
+import moment from "moment";
+import { FormRegisterPlaceHolder } from "@components/common/layout";
 
 interface UserRegisterProps {
   requesting: boolean;
@@ -33,14 +33,14 @@ class UserRegisterPage extends PureComponent<
 > {
   static authenticate = false;
 
-  static layout: string = 'public';
+  static layout = "public";
 
   constructor(props: UserRegisterProps) {
     super(props);
     this.state = {
       error: false,
-      errorMessage: '',
-      countries: []
+      errorMessage: "",
+      countries: [],
     };
   }
 
@@ -51,10 +51,8 @@ class UserRegisterPage extends PureComponent<
   componentDidUpdate(prevProps: UserRegisterProps) {
     const { success, error } = this.props;
     if (prevProps.success !== success && success) {
-      message.success(
-        'Congrats, your account has been created'
-      );
-      Router.push('/auth/login');
+      message.success("Congrats, your account has been created");
+      Router.push("/auth/login");
     }
 
     if (prevProps.error !== error && error) {
@@ -75,9 +73,12 @@ class UserRegisterPage extends PureComponent<
     const { userRegister: dispatchUserRegister } = this.props;
     let newData = { ...data };
     if (data.dateOfBirth) {
-      newData = { ...data, dateOfBirth: moment(data.dateOfBirth).toISOString() };
-    // if (data.dateOfBirth) {
-    //   data.dateOfBirth = moment(data.dateOfBirth).toISOString();
+      newData = {
+        ...data,
+        dateOfBirth: moment(data.dateOfBirth).toISOString(),
+      };
+      // if (data.dateOfBirth) {
+      //   data.dateOfBirth = moment(data.dateOfBirth).toISOString();
     }
 
     dispatchUserRegister(newData);
@@ -103,18 +104,22 @@ class UserRegisterPage extends PureComponent<
             <div className="row">
               <div className="col-lg-6">
                 <div className="contact-form-action">
-                {errorMessage && (<Alert type="error" message="Error request" banner />)}
-                <RegisterForm
-                  singularTextModel={ui?.singularTextModel || 'Performer'}
-                  error={error}
-                  onFinish={this.submit.bind(this)}
-                  submiting={requesting}
-                  countries={countries}
-                />
+                  {errorMessage && (
+                    <Alert type="error" message="Error request" banner />
+                  )}
+                  <RegisterForm
+                    singularTextModel={ui?.singularTextModel || "Performer"}
+                    error={error}
+                    onFinish={this.submit.bind(this)}
+                    submiting={requesting}
+                    countries={countries}
+                    googleReCaptchaEnabled={ui.googleReCaptchaEnabled}
+                    googleReCaptchaSiteKey={ui.googleReCaptchaSiteKey}
+                  />
                 </div>
               </div>
               <div className="col-lg-6">
-              <div className="sign-in-img"></div>
+                <div className="sign-in-img"></div>
               </div>
             </div>
           </div>
@@ -127,7 +132,7 @@ class UserRegisterPage extends PureComponent<
 const mapStateToProps = (state) => ({
   ui: state.ui,
   loggedIn: state.auth.loggedIn,
-  ...state.auth.userRegister
+  ...state.auth.userRegister,
 });
 const mapDispatch = { userRegister };
 export default connect(mapStateToProps, mapDispatch)(UserRegisterPage);
