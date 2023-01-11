@@ -1,26 +1,24 @@
-import React from 'react';
-import { IPerformer, GENDER, IBanner } from 'src/interfaces';
-import Link from 'next/link';
-import {
-  Card, Space, Row, Col, Pagination
-} from 'antd';
+import React from "react";
+import { IPerformer, GENDER, IBanner } from "src/interfaces";
+import Link from "next/link";
+import { Card, Space, Row, Col, Pagination } from "antd";
 import {
   MaleSignIcon,
   FemaleSignIcon,
-  TransgenderIcon
-} from '@components/common/base/icons';
-import { createSelector, generateUuid } from 'src/lib';
+  TransgenderIcon,
+} from "@components/common/base/icons";
+import { createSelector, generateUuid } from "src/lib";
 import {
   HeartFilled,
   HeartOutlined,
   EyeOutlined,
-  LockOutlined
-} from '@ant-design/icons';
-import './index.less';
-import { chunk } from 'lodash';
-import Banner from '@components/common/layout/banner';
-import Loader from '@components/common/base/loader';
-import { connect } from 'react-redux';
+  LockOutlined,
+} from "@ant-design/icons";
+import "./index.less";
+import { chunk } from "lodash";
+import Banner from "@components/common/layout/banner";
+import Loader from "@components/common/base/loader";
+import { connect } from "react-redux";
 
 interface IProps {
   loggedIn?: boolean;
@@ -42,11 +40,11 @@ interface IProps {
 const renderTitle = (gender: GENDER, name: string) => (
   <div className="p-title">
     <span style={{ marginRight: 5 }}>{name}</span>
-    {gender === 'male' ? (
+    {gender === "male" ? (
       <span className="anticon">
         <MaleSignIcon />
       </span>
-    ) : gender === 'female' ? (
+    ) : gender === "female" ? (
       <span className="anticon">
         <FemaleSignIcon />
       </span>
@@ -62,14 +60,11 @@ const renderTags = (tags: string[]) => (
   <Space className="tags" wrap size={[5, 2]}>
     {tags.map((tag) => (
       <Link
-        href={{ pathname: '/tag', query: { tags: tag } }}
+        href={{ pathname: "/tag", query: { tags: tag } }}
         key={tag}
         as={`/tag/${tag}`}
       >
-        <a>
-          #
-          {tag}
-        </a>
+        <a>#{tag}</a>
       </Link>
     ))}
   </Space>
@@ -87,34 +82,35 @@ export const GridCard = ({
   loggedIn,
   onLike,
   className,
-  placeholderAvatarUrl
+  placeholderAvatarUrl,
 }: IGridCard) => {
   const { isOnline, streamingStatus } = performer;
-  const statusClassNames = ['p-status'];
-  let status = 'offline';
+  const statusClassNames = ["p-status"];
+  let status = "offline";
   if (isOnline) {
     switch (streamingStatus) {
-      case 'private':
-        statusClassNames.push('private');
-        status = 'private chat';
+      case "private":
+        statusClassNames.push("private");
+        status = "private chat";
         break;
-      case 'group':
-        statusClassNames.push('group');
-        status = 'group chat';
+      case "group":
+        statusClassNames.push("group");
+        status = "group chat";
         break;
-      case 'public':
-        status = 'live';
-        statusClassNames.push('online');
+      case "public":
+        status = "live";
+        statusClassNames.push("online");
         break;
       default:
-        status = 'online';
-        statusClassNames.push('online');
+        status = "online";
+        statusClassNames.push("online");
         break;
     }
   } else {
-    statusClassNames.push('offline');
+    statusClassNames.push("offline");
   }
-  const defaultPlaceholderAvatarUrl = placeholderAvatarUrl || '/default-user-icon.png';
+  const defaultPlaceholderAvatarUrl =
+    placeholderAvatarUrl || "/default-user-icon.png";
 
   return (
     <Card.Grid className={className} key={performer._id} hoverable={false}>
@@ -125,24 +121,24 @@ export const GridCard = ({
       )}
       <Link
         href={{
-          pathname: '/stream',
-          query: { performer: JSON.stringify(performer) }
+          pathname: "/stream",
+          query: { performer: JSON.stringify(performer) },
         }}
         as={`/profile/${performer.username}`}
       >
-        <a>
+        <a className="performer-link">
           <div className="performer-avatar">
             <img
               className="image-performer"
               src={
-                typeof performer.avatar === 'string'
-                && performer.avatar.length > 0
+                typeof performer.avatar === "string" &&
+                performer.avatar.length > 0
                   ? performer.avatar
                   : defaultPlaceholderAvatarUrl
               }
               alt=""
             />
-            <span className={statusClassNames.join(' ')}>{status}</span>
+            <span className={statusClassNames.join(" ")}>{status}</span>
             {renderTitle(performer.gender, performer.username)}
             {performer?.stats?.views > 0 && (
               <div className="p-viewer">
@@ -193,14 +189,14 @@ const PerformerGrid = ({
   setFilter,
   placeholderAvatarUrl,
   banners,
-  render
+  render,
 }: IProps) => {
   const { topBanners, rightBanners, bottomBanners } = banners;
   const RowGrid = ({ dataSource }: { dataSource: IPerformer[] }) => (
-    <Row style={{ width: '100%' }}>
-      {dataSource
-        && dataSource.length > 0
-        && dataSource.map((performer: IPerformer) => (
+    <Row style={{ width: "100%" }}>
+      {dataSource &&
+        dataSource.length > 0 &&
+        dataSource.map((performer: IPerformer) => (
           <GridCard
             placeholderAvatarUrl={placeholderAvatarUrl}
             className="performer-box"
@@ -217,14 +213,14 @@ const PerformerGrid = ({
     const { length } = data;
     if (length <= 12) {
       return (
-        <Row style={{ width: '100%' }}>
+        <Row style={{ width: "100%" }}>
           {rightBanners && rightBanners.length > 0 ? (
             <>
               <Col lg={16} md={16} xs={24}>
                 <Row>
-                  {data
-                    && data.length > 0
-                    && data.map((performer: IPerformer) => (
+                  {data &&
+                    data.length > 0 &&
+                    data.map((performer: IPerformer) => (
                       <GridCard
                         placeholderAvatarUrl={placeholderAvatarUrl}
                         className="performer-box performer-box-4-item"
@@ -240,14 +236,14 @@ const PerformerGrid = ({
                 <Banner
                   classnames="right-banners"
                   banners={rightBanners}
-                  styleImage={{ padding: '10px', width: '100%' }}
+                  styleImage={{ padding: "10px", width: "100%" }}
                 />
               </Col>
             </>
           ) : (
-            data
-            && data.length > 0
-            && data.map((performer: IPerformer) => (
+            data &&
+            data.length > 0 &&
+            data.map((performer: IPerformer) => (
               <GridCard
                 placeholderAvatarUrl={placeholderAvatarUrl}
                 className="performer-box"
@@ -267,12 +263,12 @@ const PerformerGrid = ({
         <>
           {rightBanners && rightBanners.length > 0 ? (
             <>
-              <Row style={{ width: '100%' }}>
+              <Row style={{ width: "100%" }}>
                 <Col lg={16} md={16} xs={24}>
                   <Row>
-                    {dataChunk[0]
-                      && dataChunk[0].length > 0
-                      && dataChunk[0].map((performer: IPerformer) => (
+                    {dataChunk[0] &&
+                      dataChunk[0].length > 0 &&
+                      dataChunk[0].map((performer: IPerformer) => (
                         <GridCard
                           placeholderAvatarUrl={placeholderAvatarUrl}
                           className="performer-box performer-box-4-item"
@@ -289,7 +285,7 @@ const PerformerGrid = ({
                     <Banner
                       classnames="right-banners"
                       banners={rightBanners}
-                      styleImage={{ padding: '10px', width: '100%' }}
+                      styleImage={{ padding: "10px", width: "100%" }}
                     />
                   )}
                 </Col>
@@ -308,12 +304,12 @@ const PerformerGrid = ({
         <>
           <RowGrid dataSource={dataChunk[0]} />
           {rightBanners && rightBanners.length > 0 ? (
-            <Row style={{ width: '100%' }}>
+            <Row style={{ width: "100%" }}>
               <Col xl={16} lg={18} md={18} xs={24}>
                 <Row>
-                  {dataChunk[1]
-                    && dataChunk[1].length > 0
-                    && dataChunk[1].map((performer: IPerformer) => (
+                  {dataChunk[1] &&
+                    dataChunk[1].length > 0 &&
+                    dataChunk[1].map((performer: IPerformer) => (
                       <GridCard
                         placeholderAvatarUrl={placeholderAvatarUrl}
                         className="performer-box performer-box-4-item"
@@ -329,7 +325,7 @@ const PerformerGrid = ({
                 <Banner
                   classnames="right-banners"
                   banners={rightBanners}
-                  styleImage={{ padding: '10px', width: '100%' }}
+                  styleImage={{ padding: "10px", width: "100%" }}
                 />
               </Col>
             </Row>
@@ -347,12 +343,12 @@ const PerformerGrid = ({
         <>
           <RowGrid dataSource={dataChunk[0]} />
           {rightBanners && rightBanners.length > 0 ? (
-            <Row style={{ width: '100%' }}>
+            <Row style={{ width: "100%" }}>
               <Col xl={16} lg={18} md={18} xs={24}>
                 <Row>
-                  {dataChunk[1]
-                    && dataChunk[1].length > 0
-                    && dataChunk[1].map((performer: IPerformer) => (
+                  {dataChunk[1] &&
+                    dataChunk[1].length > 0 &&
+                    dataChunk[1].map((performer: IPerformer) => (
                       <GridCard
                         placeholderAvatarUrl={placeholderAvatarUrl}
                         className="performer-box performer-box-4-item"
@@ -368,7 +364,7 @@ const PerformerGrid = ({
                 <Banner
                   classnames="right-banners"
                   banners={rightBanners}
-                  styleImage={{ padding: '10px', width: '100%' }}
+                  styleImage={{ padding: "10px", width: "100%" }}
                 />
               </Col>
             </Row>
@@ -376,8 +372,8 @@ const PerformerGrid = ({
             <RowGrid dataSource={dataChunk[1]} />
           )}
           <RowGrid dataSource={dataChunk[2]} />
-          {lastDataChunk.length > 0
-            && lastDataChunk.map((v) => (
+          {lastDataChunk.length > 0 &&
+            lastDataChunk.map((v) => (
               <RowGrid key={generateUuid()} dataSource={v} />
             ))}
         </>
@@ -386,21 +382,22 @@ const PerformerGrid = ({
     return <></>;
   };
 
-  const actions = setFilter && total > 0
-    ? [
-      total > limit && (
-        <Pagination
-          disabled={searching}
-          current={Math.round(offset / limit) + 1}
-          pageSize={limit}
-          total={total}
-          size="small"
-          onChange={(page) => setFilter('offset', (page - 1) * limit)}
-          showSizeChanger={false}
-        />
-      )
-    ]
-    : [];
+  const actions =
+    setFilter && total > 0
+      ? [
+          total > limit && (
+            <Pagination
+              disabled={searching}
+              current={Math.round(offset / limit) + 1}
+              pageSize={limit}
+              total={total}
+              size="small"
+              onChange={(page) => setFilter("offset", (page - 1) * limit)}
+              showSizeChanger={false}
+            />
+          ),
+        ]
+      : [];
 
   if (render) {
     /**
@@ -412,7 +409,7 @@ const PerformerGrid = ({
         title={title}
         bordered={false}
         hoverable={false}
-        bodyStyle={{ padding: '0' }}
+        bodyStyle={{ padding: "0" }}
         actions={actions}
       >
         <Loader spinning={searching} />
@@ -426,7 +423,7 @@ const PerformerGrid = ({
       {isPage && topBanners?.length > 0 && (
         <Banner
           banners={topBanners}
-          styleImage={{ padding: '10px', width: '100%' }}
+          styleImage={{ padding: "10px", width: "100%" }}
         />
       )}
       <Card
@@ -434,13 +431,13 @@ const PerformerGrid = ({
         title={title}
         bordered={false}
         hoverable={false}
-        bodyStyle={{ padding: '0' }}
+        bodyStyle={{ padding: "0" }}
         actions={actions}
       >
         <Loader spinning={searching} />
-        {success
+        {success &&
           // eslint-disable-next-line no-nested-ternary
-          && (total > 0 ? (
+          (total > 0 ? (
             isPage ? (
               renderGrid()
             ) : (
@@ -462,7 +459,7 @@ const PerformerGrid = ({
       {isPage && bottomBanners?.length > 0 && (
         <Banner
           banners={bottomBanners}
-          styleImage={{ padding: '10px', width: '100%' }}
+          styleImage={{ padding: "10px", width: "100%" }}
         />
       )}
     </>
@@ -476,12 +473,12 @@ PerformerGrid.defaultProps = {
   total: 0,
   success: false,
   searching: false,
-  title: '',
+  title: "",
   onLike: null,
   render: null,
   isPage: false,
   banners: {},
-  placeholderAvatarUrl: '/no-avatar.png'
+  placeholderAvatarUrl: "/no-avatar.png",
 };
 
 const bannerSelecter = (state) => state.banner.listBanners.data;
@@ -489,14 +486,14 @@ const filterBanner = createSelector(bannerSelecter, (banners) => {
   if (!banners.length) return {};
 
   return {
-    topBanners: banners.filter((b) => b.position === 'top'),
-    rightBanners: banners.filter((b) => b.position === 'right'),
-    bottomBanners: banners.filter((b) => b.position === 'bottom')
+    topBanners: banners.filter((b) => b.position === "top"),
+    rightBanners: banners.filter((b) => b.position === "right"),
+    bottomBanners: banners.filter((b) => b.position === "bottom"),
   };
 });
 const mapStates = (state: any) => ({
   placeholderAvatarUrl: state.ui.placeholderAvatarUrl,
-  banners: filterBanner(state)
+  banners: filterBanner(state),
 });
 
 export default connect(mapStates)(PerformerGrid);
