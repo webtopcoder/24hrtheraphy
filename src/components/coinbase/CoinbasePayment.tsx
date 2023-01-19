@@ -22,7 +22,11 @@ export default function CoinbasePayment({
     coinbaseRequestService
       .createCharge({ tokenPackage }, controller.signal)
       .then((charge) => {
-        window.open(charge.hosted_url);
+        window.open(
+          charge.hosted_url,
+          "Coinbase Payment",
+          "width=400,height=300"
+        );
       })
       .catch(console.error);
 
