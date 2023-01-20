@@ -1,15 +1,13 @@
-import './primary-layout.less';
-import React from 'react';
-import {
-  Layout, BackTop, Row, Col, Button, Space
-} from 'antd';
-import Head from 'next/head';
-import { connect } from 'react-redux';
-import Router from 'next/router';
-import { loadUIValue } from 'src/redux/ui/actions';
-import { IUIConfig } from 'src/interfaces/ui-config';
-import Header from '@components/common/layout/header';
-import PageBanner from '../../components/Common/PageBanner';
+import "./primary-layout.less";
+import React from "react";
+import { Layout, BackTop, Row, Col, Button, Space } from "antd";
+import Head from "next/head";
+import { connect } from "react-redux";
+import Router from "next/router";
+import { loadUIValue } from "src/redux/ui/actions";
+import { IUIConfig } from "src/interfaces/ui-config";
+import Header from "@components/common/layout/header";
+import PageBanner from "../../components/Common/PageBanner";
 
 import {
   GlobalOutlined,
@@ -22,8 +20,8 @@ import {
   PieChartOutlined,
   LineChartOutlined,
   SolutionOutlined,
-  CalendarOutlined
-} from '@ant-design/icons';
+  CalendarOutlined,
+} from "@ant-design/icons";
 // import { SiderMenu } from '@components/common/layout/menu';
 import {
   FundsIcon,
@@ -37,15 +35,16 @@ import {
   PhotosIcon,
   EarningIcon,
   PayoutRequestIcon,
-  Group
-} from '@components/common/base/icons';
-import { IUser, IPerformer, IStudio } from 'src/interfaces';
+  Group,
+} from "@components/common/base/icons";
+import { IUser, IPerformer, IStudio } from "src/interfaces";
 // import dynamic from 'next/dynamic';
-import { converDuration, createSelector } from 'src/lib';
-import Footer from '../../components/_App/Footer';
-import NumberFormat from '@components/common/layout/numberformat';
-import SideMenu from '@components/common/layout/menu';
-import { isMobile } from 'react-device-detect';
+import { converDuration, createSelector } from "src/lib";
+import Footer from "@components/common/layout/footer";
+// import Footer from '../../components/_App/Footer';
+import NumberFormat from "@components/common/layout/numberformat";
+import SideMenu from "@components/common/layout/menu";
+import { isMobile } from "react-device-detect";
 
 // const SiderMenuNoSSR = dynamic(() => import('@components/common/layout/menu'), {
 //   ssr: false
@@ -63,89 +62,89 @@ interface DefaultProps extends IUIConfig {
 
 const userSettingMenu = [
   {
-    id: 'account-settings',
-    name: 'Account Settings',
-    route: '/account/user/account-settings',
-    icon: <SettingOutlined />
+    id: "account-settings",
+    name: "Account Settings",
+    route: "/account/user/account-settings",
+    icon: <SettingOutlined />,
   },
   {
-    id: 'messages',
-    name: 'Messages',
-    route: '/messages',
-    icon: <MessageOutlined />
+    id: "messages",
+    name: "Messages",
+    route: "/messages",
+    icon: <MessageOutlined />,
   },
   {
-    id: 'favorites',
-    name: 'My favorites',
-    route: '/account/user/favorites',
-    icon: <HeartOutlined />
+    id: "favorites",
+    name: "My favorites",
+    route: "/account/user/favorites",
+    icon: <HeartOutlined />,
   },
   {
-    id: 'funds-tokens',
-    name: 'Funds / Tokens',
-    route: '/account/user/funds-tokens',
+    id: "funds-tokens",
+    name: "Funds / Tokens",
+    route: "/account/user/funds-tokens",
     icon: (
       <span className="anticon">
         <FundsIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'transaction-history',
-    name: 'Transaction History',
-    route: '/account/user/transaction-history',
+    id: "transaction-history",
+    name: "Transaction History",
+    route: "/account/user/transaction-history",
     icon: (
       <span className="anticon">
         <TransactionHistoryIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'payment-token-history',
-    name: 'Payment Tokens History',
-    route: '/account/user/payment-token-history',
+    id: "payment-token-history",
+    name: "Payment Tokens History",
+    route: "/account/user/payment-token-history",
     icon: (
       <span className="anticon">
         <PaymentTokensHistoryIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'order',
-    name: 'My orders',
-    route: '/account/user/orders',
-    icon: <OrderedListOutlined />
+    id: "order",
+    name: "My orders",
+    route: "/account/user/orders",
+    icon: <OrderedListOutlined />,
   },
   {
-    id: 'purchased-galleries',
-    name: 'Purchased Galleries',
-    route: '/account/user/purchased-gallery',
+    id: "purchased-galleries",
+    name: "Purchased Galleries",
+    route: "/account/user/purchased-gallery",
     icon: (
       <span className="anticon">
         <PurchasedImageIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'purchased-videos',
-    name: 'Purchased Videos',
-    route: '/account/user/purchased-video',
+    id: "purchased-videos",
+    name: "Purchased Videos",
+    route: "/account/user/purchased-video",
     icon: (
       <span className="anticon">
         <PurchasedVideoIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'purchased-products',
-    name: 'Purchased Products',
-    route: '/account/user/purchased-product',
+    id: "purchased-products",
+    name: "Purchased Products",
+    route: "/account/user/purchased-product",
     icon: (
       <span className="anticon">
         <PurchasedItemIcon />
       </span>
-    )
-  }
+    ),
+  },
   // {
   //   id: 'refund-request',
   //   name: 'Refund Requests',
@@ -156,148 +155,148 @@ const userSettingMenu = [
 
 const performerSettingMenu = [
   {
-    id: 'profile',
-    name: 'Profile',
-    route: '/account/performer/profile',
-    icon: <UserOutlined />
+    id: "profile",
+    name: "Profile",
+    route: "/account/performer/profile",
+    icon: <UserOutlined />,
   },
   {
-    id: 'account-settings',
-    name: 'Account Settings',
-    route: '/account/performer/account-settings',
-    icon: <SettingOutlined />
+    id: "account-settings",
+    name: "Account Settings",
+    route: "/account/performer/account-settings",
+    icon: <SettingOutlined />,
   },
   {
-    id: 'messages',
-    name: 'Messages',
-    route: '/messages',
-    icon: <MessageOutlined />
+    id: "messages",
+    name: "Messages",
+    route: "/messages",
+    icon: <MessageOutlined />,
   },
   {
-    id: 'earning',
-    name: 'Earnings',
-    route: '/account/performer/earning',
+    id: "earning",
+    name: "Earnings",
+    route: "/account/performer/earning",
     icon: (
       <span className="anticon">
         <EarningIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'schedules',
-    name: 'Schedules',
-    route: '/account/performer/schedules',
-    icon: <CalendarOutlined />
+    id: "schedules",
+    name: "Schedules",
+    route: "/account/performer/schedules",
+    icon: <CalendarOutlined />,
   },
   {
-    id: 'my-products',
-    name: 'Products',
-    route: '/account/performer/products',
+    id: "my-products",
+    name: "Products",
+    route: "/account/performer/products",
     icon: (
       <span className="anticon">
         <MyProductIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'my-videos',
-    name: 'Videos',
-    route: '/account/performer/videos',
+    id: "my-videos",
+    name: "Videos",
+    route: "/account/performer/videos",
     icon: (
       <span className="anticon">
         <VideosIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'my-galleries',
-    name: 'Galleries',
-    route: '/account/performer/galleries',
+    id: "my-galleries",
+    name: "Galleries",
+    route: "/account/performer/galleries",
     icon: (
       <span className="anticon">
         <PhotosIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'my-blocking',
-    name: 'Blocking',
-    route: '/account/performer/geo-block',
-    icon: <GlobalOutlined />
+    id: "my-blocking",
+    name: "Blocking",
+    route: "/account/performer/geo-block",
+    icon: <GlobalOutlined />,
   },
   {
-    id: 'payout-request',
-    name: 'Payout Request',
-    route: '/account/performer/payout-requests',
+    id: "payout-request",
+    name: "Payout Request",
+    route: "/account/performer/payout-requests",
     icon: (
       <span className="anticon">
         <PayoutRequestIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'order',
-    name: 'Orders',
-    route: '/account/performer/orders',
-    icon: <OrderedListOutlined />
-  }
+    id: "order",
+    name: "Orders",
+    route: "/account/performer/orders",
+    icon: <OrderedListOutlined />,
+  },
 ];
 
 const studioSettingMenu = [
   {
-    id: 'account-settings',
-    name: 'Account Settings',
-    route: '/studio/account-settings',
-    icon: <SettingOutlined />
+    id: "account-settings",
+    name: "Account Settings",
+    route: "/studio/account-settings",
+    icon: <SettingOutlined />,
   },
   {
-    id: 'earning',
-    name: 'Earnings',
-    route: '/studio/earning',
+    id: "earning",
+    name: "Earnings",
+    route: "/studio/earning",
     icon: (
       <span className="anticon">
         <EarningIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'commission',
-    name: 'Model commissions',
-    route: '/studio/commissions',
-    icon: <PieChartOutlined />
+    id: "commission",
+    name: "Model commissions",
+    route: "/studio/commissions",
+    icon: <PieChartOutlined />,
   },
   {
-    id: 'studio-models',
-    name: 'Models',
-    route: '/studio/models',
+    id: "studio-models",
+    name: "Models",
+    route: "/studio/models",
     icon: (
       <span className="anticon">
         <Group />
       </span>
-    )
+    ),
   },
   {
-    id: 'studio-payout-requests',
-    name: 'My Payout request',
-    route: '/studio/payout-requests',
+    id: "studio-payout-requests",
+    name: "My Payout request",
+    route: "/studio/payout-requests",
     icon: (
       <span className="anticon">
         <PayoutRequestIcon />
       </span>
-    )
+    ),
   },
   {
-    id: 'studioperformer-requests',
-    name: 'Performer Payout Requests',
-    route: '/studio/payout-requests/performer-requests',
-    icon: <SolutionOutlined />
+    id: "studioperformer-requests",
+    name: "Performer Payout Requests",
+    route: "/studio/payout-requests/performer-requests",
+    icon: <SolutionOutlined />,
   },
   {
-    id: 'performer-stats',
-    name: 'Performer Stats',
-    route: '/studio/models/stats',
-    icon: <LineChartOutlined />
-  }
+    id: "performer-stats",
+    name: "Performer Stats",
+    route: "/studio/models/stats",
+    icon: <LineChartOutlined />,
+  },
 ];
 
 class PrimaryLayout extends React.PureComponent<DefaultProps> {
@@ -314,26 +313,29 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
     dispatchLoadUIValue();
     // this.rightPrimaryLayoutRef = React.createRef<HTMLDivElement>();
     this.onRouteChangeStart();
-    Router.events.on('routeChangeStart', this.onRouteChangeStart);
+    Router.events.on("routeChangeStart", this.onRouteChangeStart);
   }
 
   componentWillUnmount() {
-    Router.events.off('routeChangeStart', this.onRouteChangeStart);
+    Router.events.off("routeChangeStart", this.onRouteChangeStart);
   }
 
   onLive() {
-    Router.push('/live');
+    Router.push("/live");
   }
 
   onRouteChangeStart = () => {
-    if (isMobile && this.rightPrimaryLayoutRef.current instanceof HTMLDivElement) {
-      const container = document.querySelector('.container');
+    if (
+      isMobile &&
+      this.rightPrimaryLayoutRef.current instanceof HTMLDivElement
+    ) {
+      const container = document.querySelector(".container");
       const rect = this.rightPrimaryLayoutRef.current.getBoundingClientRect();
       if (container) {
-        container.scroll({ top: rect.top, behavior: 'smooth' });
+        container.scroll({ top: rect.top, behavior: "smooth" });
       }
     }
-  }
+  };
 
   render() {
     const {
@@ -344,12 +346,12 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
       currentUser,
       totalNotReadMessage,
       // siteName,
-      theme
+      theme,
     } = this.props;
     const headerProps = {
       logo,
       collapsed,
-      theme
+      theme,
     };
 
     return (
@@ -369,9 +371,9 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
         >
           <Header {...headerProps} />
           <div
-          style={{
-            marginTop: '72px',
-          }}
+            style={{
+              marginTop: "72px",
+            }}
           >
             <PageBanner
               pageTitle="My Profile"
@@ -385,8 +387,8 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
             <div className="primary-content">
               <Row gutter={10}>
                 <Col xs={24} sm={4}>
-                  {currentUser?._id && currentUser?.role === 'performer' && (
-                    <Space direction="vertical" style={{ width: '100%' }}>
+                  {currentUser?._id && currentUser?.role === "performer" && (
+                    <Space direction="vertical" style={{ width: "100%" }}>
                       <Button
                         type="primary"
                         className="btn-live"
@@ -400,13 +402,13 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
                       />
                     </Space>
                   )}
-                  {currentUser?._id && currentUser?.role === 'user' && (
+                  {currentUser?._id && currentUser?.role === "user" && (
                     <SideMenu
                       menus={userSettingMenu}
                       totalNotReadMessage={totalNotReadMessage}
                     />
                   )}
-                  {currentUser?._id && currentUser?.role === 'studio' && (
+                  {currentUser?._id && currentUser?.role === "studio" && (
                     <>
                       <div className="tk-studio">
                         <div className="stat">
@@ -428,8 +430,8 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
                         <div className="stat">
                           <span>Total hours online</span>
                           <span>
-                            {currentUser.stats.totalHoursOnline
-                              && converDuration(
+                            {currentUser.stats.totalHoursOnline &&
+                              converDuration(
                                 currentUser.stats.totalHoursOnline
                               )}
                           </span>
@@ -437,7 +439,7 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
                       </div>
                       <SideMenu
                         menus={studioSettingMenu}
-                      // totalNotReadMessage={totalNotReadMessage}
+                        // totalNotReadMessage={totalNotReadMessage}
                       />
                     </>
                   )}
@@ -456,7 +458,9 @@ class PrimaryLayout extends React.PureComponent<DefaultProps> {
           <Footer />
           <BackTop
             className="backTop"
-            target={() => document.querySelector('#primaryLayout') as HTMLElement}
+            target={() =>
+              document.querySelector("#primaryLayout") as HTMLElement
+            }
           />
         </div>
       </Layout>
@@ -478,15 +482,15 @@ const currentUserSelecter = createSelector(
     if (!auth.loggedIn) return {};
 
     if (user?._id) {
-      return { ...user, role: 'user' };
+      return { ...user, role: "user" };
     }
 
     if (performer?._id) {
-      return { ...performer, role: 'performer' };
+      return { ...performer, role: "performer" };
     }
 
     if (studio?._id) {
-      return { ...studio, role: 'studio' };
+      return { ...studio, role: "studio" };
     }
 
     return {};
@@ -497,7 +501,7 @@ const mapStateToProps = (state: any) => ({
   ...state.ui,
   ...state.auth,
   totalNotReadMessage: state.message.totalNotReadMessage,
-  currentUser: currentUserSelecter(state)
+  currentUser: currentUserSelecter(state),
 });
 const mapDispatchToProps = { loadUIValue };
 

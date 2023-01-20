@@ -1,11 +1,11 @@
 /* eslint-disable react/no-danger */
-import './footer.less';
-import { PureComponent } from 'react';
-import Link from 'next/link';
-import { Layout, Divider } from 'antd';
-import { IUIConfig } from 'src/interfaces';
-import { connect } from 'react-redux';
-import { generateUuid } from '@lib/string';
+import "./footer.less";
+import { PureComponent } from "react";
+import Link from "next/link";
+import { Layout, Divider } from "antd";
+import { IUIConfig } from "src/interfaces";
+import { connect } from "react-redux";
+import { generateUuid } from "@lib/string";
 
 interface IProps {
   ui: IUIConfig;
@@ -14,14 +14,11 @@ class Footer extends PureComponent<IProps> {
   renderMenu() {
     const { ui } = this.props;
     const { menus = [] } = ui;
-
     const data = [];
     if (menus.length) {
       menus.forEach((menu) => {
-        const {
-          path, isOpenNewTab, internal, title
-        } = menu;
-        const href = path || '/';
+        const { path, isOpenNewTab, internal, title } = menu;
+        const href = path || "/";
         const key = generateUuid();
         if (internal) {
           data.push(
@@ -35,7 +32,7 @@ class Footer extends PureComponent<IProps> {
               href={href}
               key={key}
               className="mr-8"
-              target={isOpenNewTab ? '_blank' : ''}
+              target={isOpenNewTab ? "_blank" : ""}
               rel="noreferrer"
             >
               {menu.title}
@@ -59,12 +56,7 @@ class Footer extends PureComponent<IProps> {
             <div dangerouslySetInnerHTML={{ __html: ui.footerContent }} />
           ) : (
             <p>
-              © Copyright
-              {' '}
-              {siteName}
-              {' '}
-              {new Date().getFullYear()}
-              . All Rights
+              © Copyright {siteName} {new Date().getFullYear()}. All Rights
               Reserved
             </p>
           )}
@@ -74,7 +66,7 @@ class Footer extends PureComponent<IProps> {
   }
 }
 const mapStateToProps = (state: any) => ({
-  ui: { ...state.ui }
+  ui: { ...state.ui },
 });
 const mapDispatch = {};
 export default connect(mapStateToProps, mapDispatch)(Footer);
