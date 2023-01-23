@@ -36,9 +36,9 @@ const MainBanner = () => {
 						<div className="d-table-cell">
 							<div className="container">
 								<div className="slider-text one">
-									<span className="top-title">Welcome To Corf</span>
-									<h1>All The Services You Expect From A Clinical Trial Lab</h1>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil architecto laborum eaque! Deserunt maxime, minus quas molestiae reiciendis esse natus nisi iure.</p>
+									<span className="top-title">Welcome to 24 hour therapy</span>
+									<h1>Convenient and affordable therapy anytime and anywhere</h1>
+									<p>Get guidance and support from your therapist.</p>
 
 									<div className="slider-btn">
                                         <Link href="/appointment">
@@ -58,9 +58,9 @@ const MainBanner = () => {
 						<div className="d-table-cell">
 							<div className="container">
 								<div className="slider-text two">
-									<span className="top-title">Welcome To Corf</span>
-									<h1>We Ensure Safe Diagnoses And Effective Therapies</h1>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil architecto laborum eaque! Deserunt maxime, minus quas molestiae reiciendis esse natus nisi iure.</p>
+									<span className="top-title">Welcome to 24 hour therapy</span>
+									<h1>Face the obstacles in your life and bring back your confidence.</h1>
+									<p>24 hour therapy, Providing personalized therapy.</p>
 									
 									<div className="slider-btn">
                                         <Link href="/appointment">

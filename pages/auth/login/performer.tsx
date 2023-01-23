@@ -6,7 +6,7 @@ import Head from "next/head";
 import { performerlogin, resetLoginData } from "@redux/auth/actions";
 import { ILogin, IUIConfig } from "src/interfaces";
 import { FormRegisterPlaceHolder } from "@components/common/layout";
-import PageBanner from "components/Common/PageBanner";
+import PageBanner from '../../../src/components/homepage/PageBanner';
 
 interface IProps {
   requesting: boolean;

@@ -9,7 +9,10 @@ const Footer = () => {
             <footer className="footer-top-area f-bg pt-100 pb-70">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-3 col-md-6">
+                        <div className="col-lg-1 col-md-6">
+
+                        </div>
+                        <div className="col-lg-5 col-md-6">
                             <div className="single-widget">
                                 <Link href="/">
                                     <a>
@@ -17,22 +20,22 @@ const Footer = () => {
                                     </a>
                                 </Link>
 
-                                <p>Lorem ipsum dolor, sit amet earum consectetur adipisicing elit. Cupiditate rerum quidem fugiat sapiente! Iusto quae perspiciatis, repudiandae ipsam minus et ex, aliquid dolor molestias, earum enim officiis porro obcaecati.</p>
+                                <p>24 hour therapy is an online therapy platform made for people who are struggling mentally, emotionally and experiencing behavioral concerns. Our mission is to provide the perfect therapy according to your needs anytime and anywhere. </p>
 
                                 <div className="social-area">
                                     <ul>
                                         <li>
-                                            <a href="https://www.facebook.com/" target="_blank">
+                                            <a href="https://www.facebook.com/profile.php?id=100087153733204" target="_blank">
                                                 <i className="bx bxl-facebook"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://www.twitter.com/" target="_blank">
+                                            <a href="https://twitter.com/Camline_therapy" target="_blank">
                                                 <i className="bx bxl-twitter"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://www.linkedin.com/" target="_blank">
+                                            <a href="https://www.linkedin.com/in/camline-therapy-339440263/?trk=public-profile-join-page" target="_blank">
                                                 <i className="bx bxl-linkedin"></i>
                                             </a>
                                         </li>
@@ -42,7 +45,7 @@ const Footer = () => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://www.instagram.com/" target="_blank">
+                                            <a href="https://www.instagram.com/camline24hrtherapy/" target="_blank">
                                                 <i className="bx bxl-instagram"></i>
                                             </a>
                                         </li>
@@ -83,29 +86,12 @@ const Footer = () => {
                                             </a>
                                         </Link>
                                     </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="col-lg-4 col-md-6">
-                            <div className="single-widget open-time">
-                                <h3>Opening Hours</h3>
-                                <ul>
                                     <li>
-                                        <span>Mon-Tue:</span>
-                                        <span className="right">6:00 AM - 10:00 PM</span>
-                                    </li>
-                                    <li>
-                                        <span>Wed-Thu:</span>
-                                        <span className="right">6:00 AM - 10:00 PM</span>
-                                    </li>
-                                    <li>
-                                        <span>Fry:</span>
-                                        <span className="right">6:00 AM - 04:00 PM</span>
-                                    </li>
-                                    <li>
-                                        <span>Sun:</span>
-                                        <span className="right">Closed</span>
+                                        <Link href="https://www.nhs.uk/nhs-services/mental-health-services/where-to-get-urgent-help-for-mental-health/">
+                                            <a>
+                                                Emergency Services
+                                            </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -126,16 +112,19 @@ const Footer = () => {
                                         <a href="mailto:hello@corf.com">
                                             <i className="bx bx-envelope"></i>
                                             <span>Email:</span>
-                                            hello@corf.com
+                                            info@24hrtheraphy.com
                                         </a>
                                     </li>
                                     <li>
                                         <i className="bx bx-location-plus"></i>
                                         <span>Address:</span>
-                                        123, Western Road, Melbourne Australia
+                                        Cuffley Place, Office Suite 112 Sopers Rd, Cuffley, London, United Kingdom, EN6 4SG
                                     </li>
                                 </ul>
                             </div>
+                        </div>
+                        <div className="col-lg-1 col-md-6">
+
                         </div>
                     </div>
                 </div>

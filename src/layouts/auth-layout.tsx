@@ -7,8 +7,8 @@ import Router from "next/router";
 import { updateUIValue, loadUIValue } from "src/redux/ui/actions";
 import { IMenu, IUIConfig } from "src/interfaces/ui-config";
 import Header from "@components/common/layout/header";
-import Footer from "@components/common/layout/footer";
-// import Footer from '../../components/_App/Footer';
+// import Footer from '@components/common/layout/footer';
+import Footer from "../components/common/layout/NFooter";
 
 interface DefaultProps extends IUIConfig {
   children: any;

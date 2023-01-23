@@ -7,7 +7,7 @@ import Router from "next/router";
 import { loadUIValue } from "src/redux/ui/actions";
 import { IUIConfig } from "src/interfaces/ui-config";
 import Header from "@components/common/layout/header";
-import PageBanner from "../../components/Common/PageBanner";
+import PageBanner from "../components/homepage/PageBanner";
 
 import {
   GlobalOutlined,
@@ -40,8 +40,8 @@ import {
 import { IUser, IPerformer, IStudio } from "src/interfaces";
 // import dynamic from 'next/dynamic';
 import { converDuration, createSelector } from "src/lib";
-import Footer from "@components/common/layout/footer";
-// import Footer from '../../components/_App/Footer';
+// import Footer from '@components/common/layout/footer';
+import Footer from "../components/common/layout/NFooter";
 import NumberFormat from "@components/common/layout/numberformat";
 import SideMenu from "@components/common/layout/menu";
 import { isMobile } from "react-device-detect";

@@ -6,9 +6,9 @@ import {
   IPerformSearch,
   IUIConfig
 } from 'src/interfaces';
-import Subscribe from '../../components/Common/Subscribe';
-import PageBanner from '../../components/Common/PageBanner';
-import Facilities from '../../components/HomeOne/Facility';
+// import Subscribe from '../../components/Common/Subscribe';
+import PageBanner from '../../src/components/homepage/PageBanner';
+import Facilities from '../../src/components/homepage/Facility';
 import './index.less';
 import { connect } from 'react-redux';
 import {
@@ -184,7 +184,7 @@ class Homepage extends PureComponent<IProps, IStates> {
           imgClass="bg-3"
         />
         <Facilities />
-        <Subscribe />
+        {/* <Subscribe /> */}
       </>
     );
   }

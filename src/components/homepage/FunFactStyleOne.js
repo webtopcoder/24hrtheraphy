@@ -1,8 +1,8 @@
-import React from 'react'; 
+import React from 'react';
 
-const FunFactStyleThree = () => {
+const FunFactStyleOne = () => {
     return (      
-        <div className="counter-area bg-color pt-100 pb-70">
+        <div className="counter-area pt-100 pb-70">
 			<div className="container">
 				<div className="row">
 					<div className="col-lg-3 col-sm-6">
@@ -13,7 +13,7 @@ const FunFactStyleThree = () => {
                                 540 <span className="target">+</span>
 							</h2>
 
-							<p>Expert Doctors</p>
+							<p>Licensed Therapists</p>
 						</div>
 					</div>
 
@@ -54,8 +54,17 @@ const FunFactStyleThree = () => {
 					</div>
 				</div>
 			</div>
+
+			<div className="shape-wrap">
+				<div className="shape-1">
+					<img src="/img/shape/counter-shape.png" alt="Image" />
+				</div>
+				<div className="shape-2">
+					<img src="/img/shape/counter-shape.png" alt="Image" />
+				</div>
+			</div>
 		</div>
     )
 }
 
-export default FunFactStyleThree;
+export default FunFactStyleOne;
