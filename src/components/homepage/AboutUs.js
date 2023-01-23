@@ -27,33 +27,33 @@ const AboutUs = () => {
 					<div className="col-lg-6">
 						<div className="about-content">
 							<span className="top-title">About Us</span>
-							<h2>We are trusted The Best Certificate Healthcare</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
+							<h2>Online Therapy, Effective, Affordable, Convenient</h2>
+							<p>24 hour therapy is an online therapy platform made to help people who are struggling mentally, emotionally and experiencing behavioral concerns. <br />You can find qualified and experienced counselors and therapists anytime and anywhere according to your convenience. If you or someone you know is experiencing mental health, behavioral or any kind of issues or life challenges, visit <Link href="/our-therapists">our therapist page</Link> to find a qualified therapist to talk to.</p>
 							
 							<ul>
 								<li>
 									<i className="flaticon-tick"></i>
-									Scientific skills for getting a better result
+									Licensed Therapist
 								</li>
 								<li>
 									<i className="flaticon-tick"></i>
-									A good environment for work
+									Privacy
 								</li>
 								<li>
 									<i className="flaticon-tick"></i>
-									Professional doctors
+									24/7 service
 								</li>
 								<li>
 									<i className="flaticon-tick"></i>
-									Digital laboratory
+									Personalized Therapy
 								</li>
 								<li>
 									<i className="flaticon-tick"></i>
-									Emergency services
+									A trustful environment
 								</li>
 							</ul>
 
-                            <Link href="/about">
+                            <Link href="/about-us">
 						    	<a className="default-btn">About Us</a>
                             </Link>
 						</div>

@@ -46,9 +46,9 @@ const DoctorsStyleOne = () => {
         <div className="doctors-area pt-100 pb-70">
 			<div className="container">
 				<div className="section-title">
-					<span className="top-title">Our Doctors</span>
-					<h2>Our Specialist Doctors</h2>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A facilis vel consequatur tempora atque blanditiis exercitationem incidunt, alias corporis quam assumenda dicta, temporibus.</p>
+					<span className="top-title">Our therapists</span>
+					<h2>Our therapists</h2>
+					<p>24 hour therapy being an online therapy platform offers access to licensed, skilled and experienced therapist.</p>
 				</div>
 
                 {display ? <OwlCarousel 

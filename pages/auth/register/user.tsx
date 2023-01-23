@@ -4,7 +4,7 @@ import { message, Alert } from "antd";
 import { connect } from "react-redux";
 import Head from "next/head";
 import RegisterForm from "@components/auth/register/user-register-form";
-import PageBanner from "../../../components/Common/PageBanner";
+import PageBanner from '../../../src/components/homepage/PageBanner';
 import { IUserRegisterFormData, ICountries, IUIConfig } from "src/interfaces";
 import { userRegister } from "@redux/auth/actions";
 import Router from "next/router";

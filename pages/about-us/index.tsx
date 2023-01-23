@@ -6,8 +6,10 @@ import {
   IPerformSearch,
   IUIConfig
 } from 'src/interfaces';
-import Subscribe from '../../components/Common/Subscribe';
-import PageBanner from '../../components/Common/PageBanner';
+// import Subscribe from '../../components/Common/Subscribe';
+
+import PageBanner from '../../src/components/homepage/PageBanner';
+
 import './index.less';
 import { connect } from 'react-redux';
 import {
@@ -218,7 +220,7 @@ class Homepage extends PureComponent<IProps, IStates> {
             </div>
           </div>
         </div>
-        <Subscribe />
+        {/* <Subscribe /> */}
       </>
     );
   }

@@ -1,7 +1,7 @@
 import { PureComponent } from "react";
 import { connect } from "react-redux";
 import FormLogin from "@components/auth/login/user-login-form";
-import PageBanner from "../../../components/Common/PageBanner";
+import PageBanner from '../../../src/components/homepage/PageBanner';
 import Head from "next/head";
 import { login, resetLoginData } from "@redux/auth/actions";
 import { ILogin, IUIConfig } from "src/interfaces";

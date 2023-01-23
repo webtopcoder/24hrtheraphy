@@ -9,8 +9,9 @@ import { updateUIValue, loadUIValue } from 'src/redux/ui/actions';
 import { IMenu, IUIConfig } from 'src/interfaces/ui-config';
 import Header from '@components/common/layout/header';
 import Head from 'next/head';
-import Footer from '@components/common/layout/footer';
-// import Footer from '../../components/_App/Footer';
+// import Footer from '@components/common/layout/footer';
+
+import Footer from '../components/common/layout/NFooter';
 import { postService } from 'src/services';
 import { Popup18PlusContent } from 'src/components/common/layout';
 
