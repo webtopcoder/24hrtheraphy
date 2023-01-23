@@ -40,13 +40,13 @@ const MainBanner = () => {
 									<h1>Convenient and affordable therapy anytime and anywhere</h1>
 									<p>Get guidance and support from your therapist.</p>
 
-									<div className="slider-btn">
+									{/* <div className="slider-btn">
                                         <Link href="/appointment">
                                             <a className="default-btn">
                                                 Book An Appointment
                                             </a>
                                         </Link>
-									</div>
+									</div> */}
 								</div>
 							</div>
 						</div>
@@ -62,13 +62,13 @@ const MainBanner = () => {
 									<h1>Face the obstacles in your life and bring back your confidence.</h1>
 									<p>24 hour therapy, Providing personalized therapy.</p>
 									
-									<div className="slider-btn">
+									{/* <div className="slider-btn">
                                         <Link href="/appointment">
                                             <a className="default-btn">
                                                 Book An Appointment
                                             </a>
                                         </Link>
-									</div>
+									</div> */}
 								</div>
 							</div>
 						</div>

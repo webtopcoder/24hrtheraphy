@@ -1183,7 +1183,6 @@ Services Area Style
   -webkit-box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
           box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
   padding: 30px;
-  height: 452px;
   position: relative;
   z-index: 1;
   -webkit-transition: all 0.5s;
@@ -1193,8 +1192,19 @@ Services Area Style
   overflow: hidden;
 }
 
-.single-services p {
-  text-align: left;
+.single-services::before {
+  content: "";
+  position: absolute;
+  right: 665px;
+  top: 50%;
+  width: 100%;
+  height: 10px;
+  background-color: #1b3fff;
+  -webkit-box-shadow: 0 0 15px #1b3fff;
+          box-shadow: 0 0 15px #1b3fff;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  z-index: -1;
 }
 
 .single-services::after {
@@ -5301,7 +5311,7 @@ Hero Slider Area Style
 
 .hero-slider-area .slider-item .slider-text span {
   color: #ffffff;
-  font-size: 15px;
+  font-size: 20px;
   display: block;
   margin-bottom: 10px;
 }
@@ -6631,7 +6641,7 @@ Nav Area Seven Style
 Hero Slider Area Seven Style
 ======================================================*/
 .hero-slider-area-seven .slider-item {
-  height: 106vh;
+  height: 100vh;
   position: relative;
   z-index: 1;
 }
