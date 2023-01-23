@@ -5,7 +5,7 @@ import { authService } from 'src/services/auth.service';
 import {
   Form, message, Input, Button, Select
 } from 'antd';
-import PageBanner from '../../../components/Common/PageBanner';
+import PageBanner from '../../../src/components/homepage/PageBanner';
 import { IForgotPasswordFormData, IUIConfig } from 'src/interfaces';
 import { getResponseError } from 'src/lib/utils';
 import Link from 'next/link';
