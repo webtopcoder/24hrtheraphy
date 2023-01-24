@@ -6641,7 +6641,7 @@ Nav Area Seven Style
 Hero Slider Area Seven Style
 ======================================================*/
 .hero-slider-area-seven .slider-item {
-  height: 100vh;
+  height: 110vh;
   position: relative;
   z-index: 1;
 }
@@ -6653,6 +6653,11 @@ Hero Slider Area Seven Style
 .hero-slider-area-seven .slider-item.slider-item-bg-5 {
   background-image: url(/img/home-seven/home-seven-banner2.jpg);
 }
+
+.hero-slider-area-seven .slider-item.slider-item-bg-6 {
+  background-image: url(/img/home-seven/home-seven-banner3.jpg);
+}
+
 
 .hero-slider-area-seven .slider-item::before {
   content: "";

@@ -16,7 +16,7 @@ const Footer = () => {
                             <div className="single-widget">
                                 <Link href="/">
                                     <a>
-                                        <img src="/img/logo.png" alt="Image" />
+                                        <img src="/img/logo.png" className='footer-logo' alt="Image" />
                                     </a>
                                 </Link>
 
@@ -37,11 +37,6 @@ const Footer = () => {
                                         <li>
                                             <a href="https://www.linkedin.com/in/camline-therapy-339440263/?trk=public-profile-join-page" target="_blank">
                                                 <i className="bx bxl-linkedin"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="https://www.facebyoutubeook.com/" target="_blank">
-                                                <i className="bx bxl-youtube"></i>
                                             </a>
                                         </li>
                                         <li>
