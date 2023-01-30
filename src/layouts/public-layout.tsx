@@ -1,17 +1,17 @@
 /* eslint-disable react/no-danger */
-import './public-layout.less';
-import { PureComponent } from 'react';
-import {
-  Layout, BackTop, Modal
-} from 'antd';
-import { connect } from 'react-redux';
-import { updateUIValue, loadUIValue } from 'src/redux/ui/actions';
-import { IMenu, IUIConfig } from 'src/interfaces/ui-config';
-import Header from '@components/common/layout/header';
-import Head from 'next/head';
-import Footer from '../../components/_App/Footer';
-import { postService } from 'src/services';
-import { Popup18PlusContent } from 'src/components/common/layout';
+import "./public-layout.less";
+import { PureComponent } from "react";
+import { Layout, BackTop, Modal } from "antd";
+import { connect } from "react-redux";
+import { updateUIValue, loadUIValue } from "src/redux/ui/actions";
+import { IMenu, IUIConfig } from "src/interfaces/ui-config";
+import Header from "@components/common/layout/header";
+import Head from "next/head";
+// import Footer from '@components/common/layout/footer';
+
+import Footer from "../components/common/layout/NFooter";
+import { postService } from "src/services";
+import { Popup18PlusContent } from "src/components/common/layout";
 
 interface DefaultProps extends IUIConfig {
   children: any;
@@ -26,8 +26,8 @@ interface DefaultProps extends IUIConfig {
 
 class PrimaryLayout extends PureComponent<DefaultProps> {
   state = {
-    popupContent18: '',
-    visiblePopup18: false
+    popupContent18: "",
+    visiblePopup18: false,
   };
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class PrimaryLayout extends PureComponent<DefaultProps> {
     dispatchLoadUIValue();
     if (process.browser) {
       const { agree18 } = localStorage;
-      if (agree18 !== 'yes' && popup18Enabled) {
+      if (agree18 !== "yes" && popup18Enabled) {
         this.setState({ visiblePopup18: true });
         this.getPopup18PlusContent();
       }
@@ -44,12 +44,12 @@ class PrimaryLayout extends PureComponent<DefaultProps> {
 
   handlePopup18Ok() {
     // set cookie / local storage and hide popup
-    localStorage.setItem('agree18', 'yes');
+    localStorage.setItem("agree18", "yes");
     this.setState({ visiblePopup18: false });
   }
 
   handlePopup18Cancel() {
-    window.location.href = 'http://www.google.com';
+    window.location.href = "http://www.google.com";
   }
 
   onThemeChange = (theme: string) => {
@@ -67,10 +67,10 @@ class PrimaryLayout extends PureComponent<DefaultProps> {
       const { popup18ContentId } = this.props;
       const resp = await postService.findById(popup18ContentId);
       this.setState({
-        popupContent18: resp.data?.content || ''
+        popupContent18: resp.data?.content || "",
       });
     } catch {
-      this.setState({ popupContent18: '' });
+      this.setState({ popupContent18: "" });
     }
   }
 
@@ -80,13 +80,13 @@ class PrimaryLayout extends PureComponent<DefaultProps> {
       logo,
       // siteName,
       theme,
-      popup18ContentId
+      popup18ContentId,
     } = this.props;
     const { popupContent18, visiblePopup18 } = this.state;
     const headerProps = {
       logo,
       theme,
-      onCollapseChange: this.onCollapseChange
+      onCollapseChange: this.onCollapseChange,
     };
 
     return (
@@ -118,11 +118,17 @@ class PrimaryLayout extends PureComponent<DefaultProps> {
             onOk={this.handlePopup18Ok.bind(this)}
             onCancel={() => this.handlePopup18Cancel()}
           >
-            {(popup18ContentId && popupContent18) ? <div dangerouslySetInnerHTML={{ __html: popupContent18 }} /> : <Popup18PlusContent />}
+            {popup18ContentId && popupContent18 ? (
+              <div dangerouslySetInnerHTML={{ __html: popupContent18 }} />
+            ) : (
+              <Popup18PlusContent />
+            )}
           </Modal>
           <BackTop
             className="backTop"
-            target={() => document.querySelector('#publicLayout') as HTMLElement}
+            target={() =>
+              document.querySelector("#publicLayout") as HTMLElement
+            }
           />
         </Layout>
       </>
@@ -132,7 +138,7 @@ class PrimaryLayout extends PureComponent<DefaultProps> {
 
 const mapStateToProps = (state: any) => ({
   ...state.ui,
-  ...state.auth
+  ...state.auth,
 });
 const mapDispatchToProps = { updateUIValue, loadUIValue };
 

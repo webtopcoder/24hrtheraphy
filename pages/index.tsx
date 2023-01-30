@@ -6,16 +6,18 @@ import {
   IPerformSearch,
   IUIConfig
 } from 'src/interfaces';
-import MainBanner from '../components/HomeSeven/MainBanner';
-import Facilities from '../components/HomeOne/Facility';
-import AboutUs from '../components/HomeOne/AboutUs';
-import Services from '../components/HomeOne/Services';
-import EmergencyArea from '../components/HomeOne/EmergencyArea';
-import TestimonialStyleOne from '../components/Common/TestimonialStyleOne';
-import DoctorsStyleOne from '../components/Common/DoctorsStyleOne';
-import FunFactStyleOne from '../components/Common/FunFactStyleOne';
-import Subscribe from '../components/Common/Subscribe';
+
+import MainBanner from '../src/components/homepage/MainBanner';
+import Facilities from '../src/components/homepage/Facility';
+import AboutUs from '../src/components/homepage/AboutUs';
+import Services from '../src/components/homepage/Services';
+import EmergencyArea from '../src/components/homepage/EmergencyArea';
+import TestimonialStyleOne from '../src/components/homepage/TestimonialStyleOne';
+import DoctorsStyleOne from '../src/components/homepage/DoctorsStyleOne';
+import FunFactStyleOne from '../src/components/homepage/FunFactStyleOne';
+import Subscribe from '../src/components/homepage/Subscribe';
 import { connect } from 'react-redux';
+
 import {
   searchPerformer,
   updatePerformerFavourite,
@@ -186,10 +188,11 @@ class Homepage extends PureComponent<IProps, IStates> {
         <AboutUs />
         <Services />
         <DoctorsStyleOne />
-        <EmergencyArea />
-        <FunFactStyleOne />
+        {/* <EmergencyArea /> */}
         <TestimonialStyleOne />
-        <Subscribe />
+        <FunFactStyleOne />
+
+        {/* <Subscribe /> */}
       </>
     );
   }

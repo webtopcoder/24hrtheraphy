@@ -1,13 +1,14 @@
-import './auth-layout.less';
-import React from 'react';
-import { Layout, BackTop } from 'antd';
-import { enquireScreen, unenquireScreen } from 'enquire-js';
-import { connect } from 'react-redux';
-import Router from 'next/router';
-import { updateUIValue, loadUIValue } from 'src/redux/ui/actions';
-import { IMenu, IUIConfig } from 'src/interfaces/ui-config';
-import Header from '@components/common/layout/header';
-import Footer from '../../components/_App/Footer';
+import "./auth-layout.less";
+import React from "react";
+import { Layout, BackTop } from "antd";
+import { enquireScreen, unenquireScreen } from "enquire-js";
+import { connect } from "react-redux";
+import Router from "next/router";
+import { updateUIValue, loadUIValue } from "src/redux/ui/actions";
+import { IMenu, IUIConfig } from "src/interfaces/ui-config";
+import Header from "@components/common/layout/header";
+// import Footer from '@components/common/layout/footer';
+import Footer from "../components/common/layout/NFooter";
 
 interface DefaultProps extends IUIConfig {
   children: any;
@@ -20,13 +21,13 @@ interface DefaultProps extends IUIConfig {
 
 export async function getStaticProps() {
   return {
-    props: {}
+    props: {},
   };
 }
 
 class AuthLayout extends React.PureComponent<DefaultProps> {
   state = {
-    isMobile: false
+    isMobile: false,
   };
 
   enquireHandler: any;
@@ -34,7 +35,7 @@ class AuthLayout extends React.PureComponent<DefaultProps> {
   componentDidMount() {
     const { loadUIValue: dispatchLoadUIValue, loggedIn } = this.props;
     if (loggedIn) {
-      Router.push('/');
+      Router.push("/");
       return;
     }
 
@@ -43,7 +44,7 @@ class AuthLayout extends React.PureComponent<DefaultProps> {
       const { isMobile } = this.state;
       if (isMobile !== mobile) {
         this.setState({
-          isMobile: mobile
+          isMobile: mobile,
         });
       }
     });
@@ -69,13 +70,13 @@ class AuthLayout extends React.PureComponent<DefaultProps> {
       collapsed,
       logo,
       // siteName,
-      theme
+      theme,
     } = this.props;
     const headerProps = {
       logo,
       collapsed,
       theme,
-      onCollapseChange: this.onCollapseChange
+      onCollapseChange: this.onCollapseChange,
     };
 
     return (
@@ -95,7 +96,7 @@ class AuthLayout extends React.PureComponent<DefaultProps> {
 const mapStateToProps = (state: any) => ({
   ...state.ui,
   loggedIn: state.auth.loggedIn,
-  auth: state.auth
+  auth: state.auth,
 });
 const mapDispatchToProps = { updateUIValue, loadUIValue };
 

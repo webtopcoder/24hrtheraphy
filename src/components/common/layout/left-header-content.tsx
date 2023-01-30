@@ -95,7 +95,7 @@ const LeftHeaderContent = ({
         </Link>
       </NavItem>
       <NavItem
-        key="how it works"
+        key="howitworks"
         onClick={() => {
           setSelectedKey("howitworks");
         }}
@@ -106,7 +106,7 @@ const LeftHeaderContent = ({
         </Link>
       </NavItem>
       <NavItem
-        key="allModel"
+        key="model"
         onClick={() => {
           setSelectedKey("model");
         }}
@@ -116,21 +116,10 @@ const LeftHeaderContent = ({
           <a>Our Therapists</a>
         </Link>
       </NavItem>
-      {/* <NavItem
-        key="livecam"
-        onClick={() => {
-          setSelectedKey('LiveCam');
-        }}
-        aria-hidden="true"
-      >
-        <Link href="/livecam" shallow>
-          <a>Our Therapists</a>
-        </Link>
-      </NavItem> */}
       <NavItem
         key="aboutus"
         onClick={() => {
-          setSelectedKey("AboutUs");
+          setSelectedKey("aboutus");
         }}
         aria-hidden="true"
       >

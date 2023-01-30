@@ -12,7 +12,7 @@ import { settingService } from "@services/setting.service";
 import { getResponseError } from "@lib/utils";
 import moment from "moment";
 import { FormRegisterPlaceHolder } from "@components/common/layout";
-import PageBanner from "components/Common/PageBanner";
+import PageBanner from '../../../src/components/homepage/PageBanner';
 
 interface PerformerRegisterProps {
   performerRegister(data: IRegisterFormData): Function;

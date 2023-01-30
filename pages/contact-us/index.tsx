@@ -6,7 +6,7 @@ import { postService } from '@services/post.service';
 import Head from 'next/head';
 import { FormRegisterPlaceHolder } from '@components/common/layout';
 import { connect } from 'react-redux';
-import PageBanner from '../../components/Common/PageBanner';
+import PageBanner from '../../src/components/homepage/PageBanner';
 import { IUIConfig } from 'src/interfaces';
 import './index.less';
 import { getResponseError } from '@lib/utils';

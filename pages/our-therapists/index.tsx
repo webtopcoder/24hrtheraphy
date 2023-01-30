@@ -10,7 +10,7 @@ import {
   IPerformer,
   IPerformSearch
 } from 'src/interfaces';
-import PageBanner from '../../components/Common/PageBanner';
+import PageBanner from '../../src/components/homepage/PageBanner';
 import Head from 'next/head';
 import PerformerGrid from '@components/performer/performer-grid';
 import {
