@@ -13,6 +13,7 @@ import { ITokenPackage } from "src/interfaces";
 import { buyTokenSuccess } from "src/redux/user/actions";
 import { connect } from "react-redux";
 import { paypalRequestService } from "@services/paypal.service";
+import CoinbasePayment from "@components/coinbase/CoinbasePayment";
 
 interface IProps {
   buyTokenSuccess: Function;
@@ -110,18 +111,21 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
                 footer={[]}
               >
                 {selectedToken ? (
-                  <PaypalPayment
-                    onApprove={async (tokenizedData) => {
-                      const { nonce } = tokenizedData;
-                      this.setState({ open: false });
-                      await paypalRequestService.purchaseToken({
-                        nonce,
-                        tokenId: selectedToken._id,
-                      });
-                    }}
-                    amount={selectedToken.price}
-                    forceReRender={[selectedToken]}
-                  />
+                  <>
+                    <PaypalPayment
+                      onApprove={async (tokenizedData) => {
+                        const { nonce } = tokenizedData;
+                        this.setState({ open: false });
+                        await paypalRequestService.purchaseToken({
+                          nonce,
+                          tokenId: selectedToken._id,
+                        });
+                      }}
+                      amount={selectedToken.price}
+                      forceReRender={[selectedToken]}
+                    />
+                    <CoinbasePayment tokenPackage={selectedToken._id} />
+                  </>
                 ) : (
                   "No selected token"
                 )}
@@ -133,6 +137,5 @@ class UserTokensPage extends PureComponent<IProps, IStates> {
     );
   }
 }
-const mapStateToProps = () => ({});
 const mapDispatch = { buyTokenSuccess };
-export default connect(mapStateToProps, mapDispatch)(UserTokensPage);
+export default connect(undefined, mapDispatch)(UserTokensPage);
