@@ -90,16 +90,16 @@ const Services = () => {
 							</div>
 						</div>
 					</div>
-					{/* <div className="col-lg-4 col-sm-6">
+					<div className="col-lg-4 col-sm-6">
 						<div className="single-services">
-							<span className="flaticon-email"></span>
-							<h3>Live - Chat Therapy</h3>
-							<p> Live Chat therapy can be done individually or in group. <br />If you are not comfortable talking through your problems through webcam, you can choose the chat options and text your therapists. <br />Live Chat Therapy is also designed for the people who have serious social anxiety. Having to meet with the therapist in person may not be comfortable for some people. <br />Chat Therapy can help such people overcome their problem and help them communicate. </p>
+							<span className="flaticon-heartbeat"></span>
+							<h3>Family Therapy</h3>
+							<p> Family Therapy focuses on issues that affect the mental health and functioning of families.</p>
 							<div className="services-shape">
 								<img src="/img/services-card-shape.png" alt="Image" />
 							</div>
 						</div>
-					</div> */}
+					</div>
 				</div>
 			</div>
 		</div>

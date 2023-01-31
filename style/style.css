@@ -2286,7 +2286,11 @@ Footer Top Area Style
 }
 
 .single-widget img {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
+}
+
+.footer-logo{
+  width: 300px !important;
 }
 
 .single-widget h3 {
