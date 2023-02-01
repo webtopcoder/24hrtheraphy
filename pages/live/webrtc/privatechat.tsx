@@ -1,41 +1,39 @@
 /* eslint-disable no-console */
-import React, { PureComponent } from 'react';
-import Header from 'next/head';
-import classnames from 'classnames';
-import {
-  Row, Col, message, Button
-} from 'antd';
-import Router from 'next/router';
-import { IPerformer, IUser } from 'src/interfaces';
-import { streamService } from 'src/services';
-import { connect } from 'react-redux';
-import { accessPrivateRequest } from 'src/redux/streaming/actions';
-import { SocketContext, Event } from 'src/socket';
-import ChatBox from '@components/stream-chat/chat-box';
+import React, { PureComponent } from "react";
+import Header from "next/head";
+import classnames from "classnames";
+import { Row, Col, message, Button } from "antd";
+import Router from "next/router";
+import { IPerformer, IUser } from "src/interfaces";
+import { streamService } from "src/services";
+import { connect } from "react-redux";
+import { accessPrivateRequest } from "src/redux/streaming/actions";
+import { SocketContext, Event } from "src/socket";
+import ChatBox from "@components/stream-chat/chat-box";
 import {
   getStreamConversationSuccess,
   resetStreamMessage,
-  resetStreamConversation
-} from '@redux/stream-chat/actions';
-import PrivatePublisher from 'src/components/streaming/webrtc/privatechat/publisher';
-import PrivateSubscriber from 'src/components/streaming/webrtc/privatechat/subscriber';
-import { getResponseError } from '@lib/utils';
-import { Description } from '@components/streaming';
-import PreviewPlayer from '@components/streaming/subscriber';
-import { updateCurrentPerformerBalance } from '@redux/performer/actions';
+  resetStreamConversation,
+} from "@redux/stream-chat/actions";
+import PrivatePublisher from "src/components/streaming/webrtc/privatechat/publisher";
+import PrivateSubscriber from "src/components/streaming/webrtc/privatechat/subscriber";
+import { getResponseError } from "@lib/utils";
+import { Description } from "@components/streaming";
+import PreviewPlayer from "@components/streaming/subscriber";
+import { updateCurrentPerformerBalance } from "@redux/performer/actions";
 
 // eslint-disable-next-line no-shadow
 enum STREAM_EVENT {
-  JOINED_THE_ROOM = 'JOINED_THE_ROOM',
-  JOIN_ROOM = 'JOIN_ROOM',
-  LEAVE_ROOM = 'LEAVE_ROOM',
-  RECEIVED_PAID_TOKEN = 'RECEIVED_PAID_TOKEN',
-  STREAM_INFORMATION_CHANGED = 'private-stream/streamInformationChanged'
+  JOINED_THE_ROOM = "JOINED_THE_ROOM",
+  JOIN_ROOM = "JOIN_ROOM",
+  LEAVE_ROOM = "LEAVE_ROOM",
+  RECEIVED_PAID_TOKEN = "RECEIVED_PAID_TOKEN",
+  STREAM_INFORMATION_CHANGED = "private-stream/streamInformationChanged",
 }
 
-const STREAM_JOINED = 'private-stream/streamJoined';
-const STREAM_LEAVED = 'private-stream/streamLeaved';
-const JOINED_THE_ROOM = 'JOINED_THE_ROOM';
+const STREAM_JOINED = "private-stream/streamJoined";
+const STREAM_LEAVED = "private-stream/streamLeaved";
+const JOINED_THE_ROOM = "JOINED_THE_ROOM";
 
 interface IProps {
   user: IPerformer;
@@ -77,15 +75,15 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
     const { query } = ctx;
     if (!query.id) {
       if (process.browser) {
-        Router.push('/');
+        Router.push("/");
       }
 
-      ctx.res.writeHead && ctx.res.writeHead(302, { Location: '/' });
+      ctx.res.writeHead && ctx.res.writeHead(302, { Location: "/" });
       ctx.res.end && ctx.res.end();
     }
 
     return {
-      query
+      query,
     };
   }
 
@@ -96,15 +94,16 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
       roomJoined: false,
       total: 0,
       receivedToken: 0,
-      members: []
+      members: [],
     };
   }
 
   componentDidMount() {
-    const { query, accessPrivateRequest: dispatchAccessPrivateRequest } = this.props;
-    window.addEventListener('beforeunload', this.onbeforeunload);
-    Router.events.on('routeChangeStart', this.onbeforeunload);
-    this.socket = this.context;
+    const { query, accessPrivateRequest: dispatchAccessPrivateRequest } =
+      this.props;
+    window.addEventListener("beforeunload", this.onbeforeunload);
+    Router.events.on("routeChangeStart", this.onbeforeunload);
+    this.socket = this.context as any;
     this.publisherRef = React.createRef();
     this.subscriberRef = React.createRef();
     dispatchAccessPrivateRequest(query.id);
@@ -114,28 +113,28 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
     const {
       query,
       activeConversation,
-      accessPrivateRequest: dispatchAccessPrivateRequest
+      accessPrivateRequest: dispatchAccessPrivateRequest,
     } = this.props;
     if (prevProps.query.id !== query.id) {
-      this.socket = this.context;
+      this.socket = this.context as any;
       dispatchAccessPrivateRequest(query.id);
       this.previewPlayerRef && this.previewPlayerRef.destroyPlaybackVideo();
     }
     if (
-      activeConversation?.data?._id
-      && activeConversation !== prevProps.activeConversation
+      activeConversation?.data?._id &&
+      activeConversation !== prevProps.activeConversation
     ) {
       this.initSocketEvent();
-      prevProps.activeConversation?._id
-        && this.socket.emit(STREAM_EVENT.LEAVE_ROOM, {
-          conversationId: prevProps.activeConversation._id
+      prevProps.activeConversation?._id &&
+        this.socket.emit(STREAM_EVENT.LEAVE_ROOM, {
+          conversationId: prevProps.activeConversation._id,
         });
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
-    Router.events.off('routeChangeStart', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    Router.events.off("routeChangeStart", this.onbeforeunload);
   }
 
   handler({ total, members, conversationId }) {
@@ -143,7 +142,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
     if (activeConversation?.data?._id === conversationId) {
       this.setState({
         total,
-        members
+        members,
       });
     }
   }
@@ -153,18 +152,21 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
   };
 
   receivedPaidTokenHandler = ({ token, conversationId }) => {
-    const { activeConversation, updateCurrentPerformerBalance: dispatchUpdateCurrentPerformerBalance } = this.props;
+    const {
+      activeConversation,
+      updateCurrentPerformerBalance: dispatchUpdateCurrentPerformerBalance,
+    } = this.props;
     const { receivedToken } = this.state;
     if (activeConversation?.data?._id === conversationId) {
       dispatchUpdateCurrentPerformerBalance(token);
       this.setState({
-        receivedToken: receivedToken + token
+        receivedToken: receivedToken + token,
       });
     }
   };
 
   initSocketEvent() {
-    this.socket = this.context;
+    this.socket = this.context as any;
     this.socket.on(
       JOINED_THE_ROOM,
       ({ streamId, streamList, conversationId }) => {
@@ -173,11 +175,11 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
 
         this.streamId = streamId;
         this.streamList = streamList;
-        this.publisherRef.current
-          && this.publisherRef.current.publish(streamId);
+        this.publisherRef.current &&
+          this.publisherRef.current.publish(streamId);
         if (streamList.length) {
-          this.subscriberRef.current
-            && this.subscriberRef.current.play(streamList[0]);
+          this.subscriberRef.current &&
+            this.subscriberRef.current.play(streamList[0]);
         }
       }
     );
@@ -188,8 +190,8 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
         if (data.conversationId !== activeConversation.data._id) return;
 
         if (this.streamId !== data.streamId) {
-          this.subscriberRef.current
-            && this.subscriberRef.current.play(data.streamId);
+          this.subscriberRef.current &&
+            this.subscriberRef.current.play(data.streamId);
         }
       }
     );
@@ -203,9 +205,9 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
         if (this.streamId !== data.streamId) {
           this.subscriberRef.current && this.subscriberRef.current.close();
         }
-        message.error('Private call has ended.');
+        message.error("Private call has ended.");
         window.setTimeout(() => {
-          Router.push('/live');
+          Router.push("/live");
         }, 1000);
       }
     );
@@ -215,7 +217,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
     const {
       activeConversation,
       resetStreamMessage: dispatchResetStreamMessage,
-      resetStreamConversation: dispatchResetStreamConversation
+      resetStreamConversation: dispatchResetStreamConversation,
     } = this.props;
     dispatchResetStreamMessage();
     if (this.socket && activeConversation?.data?._id) {
@@ -224,7 +226,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
       this.socket.off(STREAM_LEAVED);
       this.socket.off(STREAM_EVENT.RECEIVED_PAID_TOKEN);
       this.socket.emit(STREAM_EVENT.LEAVE_ROOM, {
-        conversationId: activeConversation.data._id
+        conversationId: activeConversation.data._id,
       });
       this.publisherRef.current && this.publisherRef.current.stop();
       this.subscriberRef.current && this.subscriberRef.current.stop();
@@ -235,14 +237,14 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
       roomJoined: false,
       total: 0,
       receivedToken: 0,
-      members: []
+      members: [],
     });
   }
 
   async acceptRequest() {
     const {
       query,
-      getStreamConversationSuccess: dispatchGetStreamConversationSuccess
+      getStreamConversationSuccess: dispatchGetStreamConversationSuccess,
     } = this.props;
     if (!query.id) return;
 
@@ -251,16 +253,16 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
       this.setState({ processing: true });
       const resp = await streamService.acceptPrivateChat(query.id);
       if (resp && resp.data) {
-        this.socket = this.context;
+        this.socket = this.context as any;
         const { sessionId, conversation } = resp.data;
-        this.socket
-          && this.socket.emit(STREAM_EVENT.JOIN_ROOM, {
-            conversationId: conversation._id
+        this.socket &&
+          this.socket.emit(STREAM_EVENT.JOIN_ROOM, {
+            conversationId: conversation._id,
           });
-        this.publisherRef.current
-          && this.publisherRef.current.start(conversation._id, sessionId);
+        this.publisherRef.current &&
+          this.publisherRef.current.start(conversation._id, sessionId);
         dispatchGetStreamConversationSuccess({
-          data: conversation
+          data: conversation,
         });
       }
     } catch (e) {
@@ -277,7 +279,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
       this.setState({
         roomJoined: true,
         total,
-        members
+        members,
       });
     }
   }
@@ -287,7 +289,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
     this.subscriberRef.current && this.subscriberRef.current.stop();
 
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = "/";
     }, 10 * 1000);
   }
 
@@ -297,13 +299,8 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
   }
 
   render() {
-    const {
-      processing,
-      total,
-      members,
-      roomJoined,
-      receivedToken
-    } = this.state;
+    const { processing, total, members, roomJoined, receivedToken } =
+      this.state;
     return (
       <>
         <Header>
@@ -348,7 +345,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
               block
               type="text"
               hidden={roomJoined}
-              style={{ background: 'black', color: 'white', margin: '10px 0' }}
+              style={{ background: "black", color: "white", margin: "10px 0" }}
               onClick={this.preview.bind(this)}
             >
               Preview
@@ -358,15 +355,20 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
                 this.previewPlayerRef = ref;
               }}
               configs={{
-                isPlayMode: true
+                isPlayMode: true,
               }}
             />
-            <div className={classnames('private-streaming-container', !roomJoined ? 'hidden' : '')}>
+            <div
+              className={classnames(
+                "private-streaming-container",
+                !roomJoined ? "hidden" : ""
+              )}
+            >
               <PrivatePublisher
                 {...this.props}
                 ref={this.publisherRef}
                 configs={{
-                  localVideoId: 'private-publisher'
+                  localVideoId: "private-publisher",
                 }}
               />
               <PrivateSubscriber
@@ -374,7 +376,7 @@ class ModelPrivateChat extends PureComponent<IProps, IStates> {
                 ref={this.subscriberRef}
                 configs={{
                   isPlayMode: true,
-                  remoteVideoId: 'private-subscriber'
+                  remoteVideoId: "private-subscriber",
                 }}
               />
             </div>
@@ -400,7 +402,7 @@ ModelPrivateChat.contextType = SocketContext;
 
 const mapStateToProps = (state) => ({
   user: state.user.current,
-  activeConversation: state.streamMessage.activeConversation
+  activeConversation: state.streamMessage.activeConversation,
 });
 
 const mapDispatchs = {
@@ -408,10 +410,7 @@ const mapDispatchs = {
   getStreamConversationSuccess,
   resetStreamMessage,
   resetStreamConversation,
-  updateCurrentPerformerBalance
+  updateCurrentPerformerBalance,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchs
-)(ModelPrivateChat);
+export default connect(mapStateToProps, mapDispatchs)(ModelPrivateChat);

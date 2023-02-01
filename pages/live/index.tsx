@@ -1,33 +1,31 @@
 /* eslint-disable camelcase */
-import React, { PureComponent } from 'react';
-import Head from 'next/head';
-import {
-  Row, Col, Button, message, ButtonProps
-} from 'antd';
-import { connect } from 'react-redux';
-import { IPerformer, IUser } from 'src/interfaces';
-import { messageService, streamService } from 'src/services';
-import { LivePublisher } from '@components/streaming/publisher';
-import { SocketContext, Event } from 'src/socket';
+import React, { PureComponent } from "react";
+import Head from "next/head";
+import { Row, Col, Button, message, ButtonProps } from "antd";
+import { connect } from "react-redux";
+import { IPerformer, IUser } from "src/interfaces";
+import { messageService, streamService } from "src/services";
+import { LivePublisher } from "@components/streaming/publisher";
+import { SocketContext, Event } from "src/socket";
 import {
   getStreamConversationSuccess,
   loadStreamMessages,
   resetStreamMessage,
   resetAllStreamMessage,
-  resetStreamConversation
-} from '@redux/stream-chat/actions';
-import { updateStreamingStatus } from '@redux/performer/actions';
-import { WEBRTC_ADAPTOR_INFORMATIONS } from 'src/antmedia/constants';
-import ChatBox from '@components/stream-chat/chat-box';
-import UpdateSatusForm from '@components/performer/streaming-status-update-form';
-import Router from 'next/router';
-import { getResponseError } from '@lib/utils';
-import './index.less';
+  resetStreamConversation,
+} from "@redux/stream-chat/actions";
+import { updateStreamingStatus } from "@redux/performer/actions";
+import { WEBRTC_ADAPTOR_INFORMATIONS } from "src/antmedia/constants";
+import ChatBox from "@components/stream-chat/chat-box";
+import UpdateSatusForm from "@components/performer/streaming-status-update-form";
+import Router from "next/router";
+import { getResponseError } from "@lib/utils";
+import "./index.less";
 
 // eslint-disable-next-line no-shadow
 enum EVENT_NAME {
-  ROOM_INFORMATIOM_CHANGED = 'public-room-changed',
-  USER_LEFT_ROOM = 'USER_LEFT_ROOM'
+  ROOM_INFORMATIOM_CHANGED = "public-room-changed",
+  USER_LEFT_ROOM = "USER_LEFT_ROOM",
 }
 
 interface P {
@@ -70,21 +68,21 @@ class PerformerLivePage extends PureComponent<P, S> {
       initialized: false,
       publish_started: false,
       total: 0,
-      members: []
+      members: [],
     };
   }
 
   componentDidMount() {
-    this.socket = this.context;
+    this.socket = this.context as any;
     this.joinPublicRoom();
-    window.addEventListener('beforeunload', this.onbeforeunload);
-    Router.events.on('routeChangeStart', this.onbeforeunload);
+    window.addEventListener("beforeunload", this.onbeforeunload);
+    Router.events.on("routeChangeStart", this.onbeforeunload);
   }
 
   componentDidUpdate(prevProps: P) {
     const { updateSuccess, updateError } = this.props;
     if (prevProps.updateSuccess !== updateSuccess && updateSuccess) {
-      message.success('Update Status Success.');
+      message.success("Update Status Success.");
     }
 
     if (prevProps.updateError !== updateError && updateError) {
@@ -93,8 +91,8 @@ class PerformerLivePage extends PureComponent<P, S> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
-    Router.events.off('routeChangeStart', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    Router.events.off("routeChangeStart", this.onbeforeunload);
   }
 
   handler({ total, members, conversationId }) {
@@ -124,7 +122,7 @@ class PerformerLivePage extends PureComponent<P, S> {
       return;
     }
 
-    if (window.confirm('Are you sure want to stop this live streaming!')) {
+    if (window.confirm("Are you sure want to stop this live streaming!")) {
       window.location.reload();
     }
   }
@@ -132,7 +130,7 @@ class PerformerLivePage extends PureComponent<P, S> {
   async callback(info: WEBRTC_ADAPTOR_INFORMATIONS) {
     const { activeConversation } = this.props;
     if (activeConversation && activeConversation.data) {
-      this.socket = this.context;
+      this.socket = this.context as any;
       if (info === WEBRTC_ADAPTOR_INFORMATIONS.INITIALIZED) {
         this.setState({ initialized: true });
         try {
@@ -146,8 +144,8 @@ class PerformerLivePage extends PureComponent<P, S> {
         }
       } else if (info === WEBRTC_ADAPTOR_INFORMATIONS.PUBLISH_STARTED) {
         this.setState({ publish_started: true, loading: false });
-        this.socket.emit('public-stream/live', {
-          conversationId: activeConversation.data._id
+        this.socket.emit("public-stream/live", {
+          conversationId: activeConversation.data._id,
         });
       } else if (info === WEBRTC_ADAPTOR_INFORMATIONS.PUBLISH_FINISHED) {
         this.setState({ loading: false, publish_started: false });
@@ -155,7 +153,7 @@ class PerformerLivePage extends PureComponent<P, S> {
         this.setState({
           loading: false,
           initialized: false,
-          publish_started: false
+          publish_started: false,
         });
       }
     }
@@ -164,7 +162,7 @@ class PerformerLivePage extends PureComponent<P, S> {
   async joinPublicRoom() {
     const {
       loadStreamMessages: dispatchLoadStreamMessages,
-      getStreamConversationSuccess: dispatchGetStreamConversationSuccess
+      getStreamConversationSuccess: dispatchGetStreamConversationSuccess,
     } = this.props;
     try {
       this.setState({ fetching: true });
@@ -177,12 +175,12 @@ class PerformerLivePage extends PureComponent<P, S> {
           conversationId: conversation._id,
           limit: 25,
           offset: 0,
-          type: conversation.type
+          type: conversation.type,
         });
-        this.socket = this.context;
-        this.socket
-          && this.socket.emit('public-stream/join', {
-            conversationId: conversation._id
+        this.socket = this.context as any;
+        this.socket &&
+          this.socket.emit("public-stream/join", {
+            conversationId: conversation._id,
           });
       }
     } catch (e) {
@@ -197,13 +195,14 @@ class PerformerLivePage extends PureComponent<P, S> {
     const {
       activeConversation,
       resetStreamMessage: dispatchResetStreamMessage,
-      resetStreamConversation: dispatchResetStreamConversation
+      resetStreamConversation: dispatchResetStreamConversation,
     } = this.props;
     if (activeConversation && activeConversation.data) {
       const conversation = { ...activeConversation.data };
-      this.socket && this.socket.emit('public-stream/leave', {
-        conversationId: conversation._id
-      });
+      this.socket &&
+        this.socket.emit("public-stream/leave", {
+          conversationId: conversation._id,
+        });
       dispatchResetStreamMessage();
       dispatchResetStreamConversation();
     }
@@ -219,7 +218,7 @@ class PerformerLivePage extends PureComponent<P, S> {
       const { total, members } = this.state;
       this.setState({
         total: total - 1,
-        members: members.filter((m) => m.username !== username)
+        members: members.filter((m) => m.username !== username),
       });
     }
   }
@@ -228,17 +227,17 @@ class PerformerLivePage extends PureComponent<P, S> {
     const {
       activeConversation,
       performer,
-      resetAllStreamMessage: dispatchResetAllMessage
+      resetAllStreamMessage: dispatchResetAllMessage,
     } = this.props;
     if (
-      !activeConversation.data
-      || performer._id !== activeConversation.data.performerId
+      !activeConversation.data ||
+      performer._id !== activeConversation.data.performerId
     ) {
       return;
     }
 
     try {
-      if (!window.confirm('Are you sure you want to remove chat history?')) {
+      if (!window.confirm("Are you sure you want to remove chat history?")) {
         return;
       }
       await messageService.deleteAllMessageInConversation(
@@ -253,24 +252,27 @@ class PerformerLivePage extends PureComponent<P, S> {
 
   render() {
     const { performer, activeConversation, updating } = this.props;
-    const {
-      loading, initialized, publish_started, members, total, fetching
-    } = this.state;
+    const { loading, initialized, publish_started, members, total, fetching } =
+      this.state;
     const btnProps: ButtonProps & React.RefAttributes<HTMLElement> = {
       ref: this.btnRef,
       loading,
       disabled: fetching,
-      block: true
+      block: true,
     };
     if (initialized && publish_started) {
-      btnProps.type = 'text';
-      btnProps.style = { marginBottom: 10, background: 'black', color: 'white' };
-      btnProps.children = 'Stop broadcasting';
+      btnProps.type = "text";
+      btnProps.style = {
+        marginBottom: 10,
+        background: "black",
+        color: "white",
+      };
+      btnProps.children = "Stop broadcasting";
       btnProps.onClick = this.stop.bind(this);
     } else {
-      btnProps.type = 'primary';
+      btnProps.type = "primary";
       btnProps.style = { marginBottom: 10 };
-      btnProps.children = 'Start broadcasting';
+      btnProps.children = "Start broadcasting";
       btnProps.onClick = this.start.bind(this);
     }
 
@@ -305,7 +307,7 @@ class PerformerLivePage extends PureComponent<P, S> {
               configs={{
                 debug: true,
                 bandwidth: 900,
-                localVideoId: 'publisher'
+                localVideoId: "publisher",
               }}
             />
           </Col>
@@ -317,7 +319,7 @@ class PerformerLivePage extends PureComponent<P, S> {
               currentPerformer={performer}
             />
             {activeConversation?.data && (
-              <div style={{ margin: '10px' }}>
+              <div style={{ margin: "10px" }}>
                 <Button
                   type="primary"
                   onClick={this.removeAllMessage.bind(this)}
@@ -340,7 +342,7 @@ const mapStateToProps = (state) => ({
   updating: state.performer.updating,
   updateSuccess: state.performer.updateSuccess,
   updateError: state.performer.updateError,
-  activeConversation: state.streamMessage.activeConversation
+  activeConversation: state.streamMessage.activeConversation,
 });
 const mapDispatchs = {
   updateStreamingStatus,
@@ -348,6 +350,6 @@ const mapDispatchs = {
   loadStreamMessages,
   resetStreamMessage,
   resetAllStreamMessage,
-  resetStreamConversation
+  resetStreamConversation,
 };
 export default connect(mapStateToProps, mapDispatchs)(PerformerLivePage);

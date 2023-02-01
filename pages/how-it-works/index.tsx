@@ -1,30 +1,30 @@
-import { PureComponent } from 'react';
+import { PureComponent } from "react";
 import {
   IPerformer,
   ICountries,
   IPerformerCategogies,
   IPerformSearch,
-  IUIConfig
-} from 'src/interfaces';
+  IUIConfig,
+} from "src/interfaces";
 // import Subscribe from '../../components/Common/Subscribe';
-import PageBanner from '../../src/components/homepage/PageBanner';
-import Facilities from '../../src/components/homepage/Facility';
-import './index.less';
-import { connect } from 'react-redux';
+import PageBanner from "../../src/components/homepage/PageBanner";
+import Facilities from "../../src/components/homepage/Facility";
+import "./index.less";
+import { connect } from "react-redux";
 import {
   searchPerformer,
   updatePerformerFavourite,
-  updateCurrentPerformer
-} from '@redux/performer/actions';
-import { loginSuccess } from '@redux/auth/actions';
-import { updateCurrentUser } from '@redux/user/actions';
-import { updateCurrentStudio } from '@redux/studio/actions';
-import { favouriteService } from 'src/services';
-import { message } from 'antd';
-import { getResponseError } from 'src/lib';
-import { withRouter, NextRouter } from 'next/router';
-import { SocketContext } from 'src/socket';
-import Head from 'next/head';
+  updateCurrentPerformer,
+} from "@redux/performer/actions";
+import { loginSuccess } from "@redux/auth/actions";
+import { updateCurrentUser } from "@redux/user/actions";
+import { updateCurrentStudio } from "@redux/studio/actions";
+import { favouriteService } from "src/services";
+import { message } from "antd";
+import { getResponseError } from "src/lib";
+import { withRouter, NextRouter } from "next/router";
+import { SocketContext } from "src/socket";
+import Head from "next/head";
 
 interface IProps {
   router: NextRouter;
@@ -60,11 +60,11 @@ interface IStates {
 const initQueryState: IPerformSearch = {
   offset: 0,
   limit: 60,
-  gender: '',
-  category: '',
-  country: '',
-  sortBy: '',
-  sort: 'desc'
+  gender: "",
+  category: "",
+  country: "",
+  sortBy: "",
+  sort: "desc",
 };
 
 class Homepage extends PureComponent<IProps, IStates> {
@@ -73,23 +73,23 @@ class Homepage extends PureComponent<IProps, IStates> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      query: initQueryState
+      query: initQueryState,
     };
   }
 
   componentDidMount() {
     this.search();
-    this.socket = this.context;
-    this.socket.on('modelUpdateStatus', this.search);
-    this.socket.on('modelUpdateStreamingStatus', this.search);
+    this.socket = this.context as any;
+    this.socket.on("modelUpdateStatus", this.search);
+    this.socket.on("modelUpdateStreamingStatus", this.search);
   }
 
   componentDidUpdate(prevProps: IProps, prevStates: IStates) {
     const { router, loggedIn } = this.props;
     const { query } = this.state;
     if (
-      router.query.q !== prevProps.router.query.q
-      || query !== prevStates.query
+      router.query.q !== prevProps.router.query.q ||
+      query !== prevStates.query
     ) {
       this.search();
     }
@@ -99,17 +99,16 @@ class Homepage extends PureComponent<IProps, IStates> {
   }
 
   componentWillUnmount() {
-    this.socket = this.context;
+    this.socket = this.context as any;
     if (this.socket) {
-      this.socket.off('modelUpdateStatus');
-      this.socket.off('modelUpdateStreamingStatus');
+      this.socket.off("modelUpdateStatus");
+      this.socket.off("modelUpdateStreamingStatus");
     }
   }
 
   async onLike(performer: IPerformer) {
-    const {
-      updatePerformerFavourite: dispatchUpdatePerformerFavorite
-    } = this.props;
+    const { updatePerformerFavourite: dispatchUpdatePerformerFavorite } =
+      this.props;
     const { _id, isFavorite } = performer;
     try {
       await favouriteService.favorite(_id, isFavorite);
@@ -125,8 +124,8 @@ class Homepage extends PureComponent<IProps, IStates> {
     this.setState({
       query: {
         ...query,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   }
 
@@ -135,20 +134,18 @@ class Homepage extends PureComponent<IProps, IStates> {
     const { query } = this.state;
     dispatchSearchPerformer({
       ...query,
-      ...router.query
+      ...router.query,
     });
   };
 
   clearFilter() {
     this.setState({
-      query: initQueryState
+      query: initQueryState,
     });
   }
 
   render() {
-    const {
-      categories, countries, ui, settings
-    } = this.props;
+    const { categories, countries, ui, settings } = this.props;
     const { query } = this.state;
 
     return (
@@ -156,25 +153,12 @@ class Homepage extends PureComponent<IProps, IStates> {
         <Head>
           <title>{ui?.siteName}</title>
           <meta name="keywords" content={settings?.metaKeywords} />
-          <meta
-            name="description"
-            content={settings?.metaDescription}
-          />
+          <meta name="description" content={settings?.metaDescription} />
           {/* OG tags */}
-          <meta
-            property="og:title"
-            content={settings?.siteName}
-            key="title"
-          />
+          <meta property="og:title" content={settings?.siteName} key="title" />
           <meta property="og:image" content={settings?.logoUrl} />
-          <meta
-            property="og:keywords"
-            content={settings?.metaKeywords}
-          />
-          <meta
-            property="og:description"
-            content={settings?.metaDescription}
-          />
+          <meta property="og:keywords" content={settings?.metaKeywords} />
+          <meta property="og:description" content={settings?.metaDescription} />
         </Head>
         <PageBanner
           pageTitle="How It Works"
@@ -198,7 +182,7 @@ const mapStateToProps = (state) => ({
   countries: state.settings.countries,
   loggedIn: state.auth.loggedIn,
   categories: state.performer.categories.data,
-  settings: state.settings
+  settings: state.settings,
 });
 const mapDispatch = {
   searchPerformer,
@@ -206,6 +190,6 @@ const mapDispatch = {
   updateCurrentUser,
   updateCurrentPerformer,
   updateCurrentStudio,
-  loginSuccess
+  loginSuccess,
 };
 export default connect(mapStateToProps, mapDispatch)(withRouter(Homepage));

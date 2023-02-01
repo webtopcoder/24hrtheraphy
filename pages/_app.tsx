@@ -1,49 +1,48 @@
-import App from 'next/app';
-import React from 'react';
-import { Provider } from 'react-redux';
-import nextCookie from 'next-cookies';
-import withReduxSaga from '@redux/withReduxSaga';
-import { Store } from 'redux';
-import BaseLayout from '@layouts/base-layout';
+import App from "next/app";
+import React from "react";
+import { Provider } from "react-redux";
+import nextCookie from "next-cookies";
+import withReduxSaga from "@redux/withReduxSaga";
+import { Store } from "redux";
+import BaseLayout from "@layouts/base-layout";
 import {
   authService,
   userService,
   performerService,
   studioService,
-  bannerService
-} from '@services/index';
-import Router from 'next/router';
-import { NextPageContext } from 'next';
-import { loginSuccess } from '@redux/auth/actions';
-import { updateCurrentUser } from '@redux/user/actions';
-import { updateCurrentPerformer } from '@redux/performer/actions';
-import { settingService } from '@services/setting.service';
-import { updateCurrentStudio } from '@redux/studio/actions';
-import { updateUIValue } from '@redux/ui/actions';
-import { PERFORMER_ROLE, USER_ROLE, IResponse } from 'src/services/api-request';
-import { Socket } from 'src/socket';
-import '../style/index.less';
-import '../style/bootstrap.min.css'
-import '../style/animate.css'
-import '../style/meanmenu.css'
-import '../style/boxicons.min.css'
-import '../style/flaticon.css'
-import '../node_modules/react-modal-video/css/modal-video.min.css'
-import 'react-accessible-accordion/dist/fancy-example.css'
-import "react-datepicker/dist/react-datepicker.css"
-import '../style/style.css'
-import '../style/responsive.css'
-import { updateSettings } from '@redux/settings/actions';
-import { getBannersSuccess } from '@redux/banner/actions';
-import { SETTING_KEYS } from 'src/constants';
-import { updateLiveStreamSettings } from '@redux/streaming/actions';
-import { pick } from 'lodash';
-import Head from 'next/head';
-import cookie from 'cookie';
-import { IUIConfig } from 'src/interfaces';
+  bannerService,
+} from "@services/index";
+import Router from "next/router";
+import { NextPageContext } from "next";
+import { loginSuccess } from "@redux/auth/actions";
+import { updateCurrentUser } from "@redux/user/actions";
+import { updateCurrentPerformer } from "@redux/performer/actions";
+import { settingService } from "@services/setting.service";
+import { updateCurrentStudio } from "@redux/studio/actions";
+import { updateUIValue } from "@redux/ui/actions";
+import { PERFORMER_ROLE, USER_ROLE, IResponse } from "src/services/api-request";
+import { Socket } from "src/socket";
+import "../style/index.less";
+import "../style/bootstrap.min.css";
+import "../style/animate.css";
+import "../style/meanmenu.css";
+import "../style/boxicons.min.css";
+import "../style/flaticon.css";
+import "../node_modules/react-modal-video/css/modal-video.min.css";
+import "react-accessible-accordion/dist/fancy-example.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "../style/style.css";
+import "../style/responsive.css";
+import { updateSettings } from "@redux/settings/actions";
+import { getBannersSuccess } from "@redux/banner/actions";
+import { SETTING_KEYS } from "src/constants";
+import { updateLiveStreamSettings } from "@redux/streaming/actions";
+import { pick } from "lodash";
+import Head from "next/head";
+import cookie from "cookie";
+import { IUIConfig } from "src/interfaces";
 
-import { setGlobalConfig } from '@services/config';
-
+import { setGlobalConfig } from "@services/config";
 
 declare global {
   interface Window {
@@ -53,37 +52,37 @@ declare global {
 }
 
 export const ROLE = {
-  STUDIO: 'studio',
-  PERFORMER: 'performer',
-  USER: 'user'
+  STUDIO: "studio",
+  PERFORMER: "performer",
+  USER: "user",
 };
-function redirectLogin(ctx: NextPageContext, authenticate: boolean | string) {
 
-  console.log(process.browser)
+function redirectLogin(ctx: NextPageContext, authenticate: boolean | string) {
+  console.log(process.browser);
   if (process.browser) {
     authService.removeToken();
     authService.removeRemember();
     if (authenticate && authenticate === ROLE.STUDIO) {
-      Router.push('/studio/login');
+      Router.push("/studio/login");
       return;
     }
 
-    Router.push('/auth/login/user');
+    Router.push("/auth/login/user");
     return;
   }
 
   // fix for production build
   // ctx.res.clearCookie && ctx.res.clearCookie('token');
-  const authCookie = cookie.serialize('token', '', {
-    maxAge: -1
+  const authCookie = cookie.serialize("token", "", {
+    maxAge: -1,
   });
-  ctx.res.writeHead
-    && ctx.res.writeHead(302, {
-      'Set-Cookie': authCookie,
+  ctx.res.writeHead &&
+    ctx.res.writeHead(302, {
+      "Set-Cookie": authCookie,
       Location:
         authenticate && authenticate === ROLE.STUDIO
-          ? '/studio/login'
-          : '/auth/login/user'
+          ? "/studio/login"
+          : "/auth/login/user",
     });
   ctx.res.end && ctx.res.end();
 }
@@ -105,21 +104,21 @@ async function auth(ctx: NextPageContext, authenticate: boolean | string) {
       let resp: IResponse<any>;
       if (role === PERFORMER_ROLE) {
         resp = await performerService.me({
-          Authorization: token
+          Authorization: token,
         });
         store.dispatch(updateCurrentPerformer(resp.data));
       }
 
       if (role === USER_ROLE) {
         resp = await userService.me({
-          Authorization: token
+          Authorization: token,
         });
         store.dispatch(updateCurrentUser(resp.data));
       }
 
       if (role === ROLE.STUDIO) {
         resp = await studioService.me({
-          Authorization: token
+          Authorization: token,
         });
         store.dispatch(updateCurrentStudio(resp.data));
       }
@@ -140,16 +139,18 @@ async function auth(ctx: NextPageContext, authenticate: boolean | string) {
 async function updateSettingsStore(ctx: NextPageContext, settings) {
   try {
     const { store } = ctx;
-    store.dispatch(updateSettings({
-      tipSound: settings.tipSound,
-      metaKeywords: settings.metaKeywords,
-      metaDescription: settings.metaDescription,
-      siteName: settings.siteName,
-      logoUrl: settings.logoUrl,
-      defaultOfflineModelImage: settings.defaultOfflineModelImage,
-      defaultPrivateCallImage: settings.defaultPrivateCallImage,
-      defaultGroupChatImage: settings.defaultGroupChatImage
-    }));
+    store.dispatch(
+      updateSettings({
+        tipSound: settings.tipSound,
+        metaKeywords: settings.metaKeywords,
+        metaDescription: settings.metaDescription,
+        siteName: settings.siteName,
+        logoUrl: settings.logoUrl,
+        defaultOfflineModelImage: settings.defaultOfflineModelImage,
+        defaultPrivateCallImage: settings.defaultPrivateCallImage,
+        defaultGroupChatImage: settings.defaultGroupChatImage,
+      })
+    );
     store.dispatch(getBannersSuccess(settings.banners));
     store.dispatch(
       updateUIValue({
@@ -165,7 +166,7 @@ async function updateSettingsStore(ctx: NextPageContext, settings) {
         popup18Enabled: settings.popup18Enabled,
         popup18ContentId: settings.popup18ContentId,
         googleReCaptchaEnabled: settings.googleReCaptchaEnabled,
-        googleReCaptchaSiteKey: settings.googleReCaptchaSiteKey
+        googleReCaptchaSiteKey: settings.googleReCaptchaSiteKey,
       })
     );
     store.dispatch(
@@ -180,7 +181,7 @@ async function updateSettingsStore(ctx: NextPageContext, settings) {
           SETTING_KEYS.DEFAULT_OFFLINE_MODEL_IMAGE,
           SETTING_KEYS.DEFAULT_MODEL_PRIVATECALL_WITH_USER_IMAGE,
           SETTING_KEYS.DEFAULT_MODEL_IN_GROUP_CHAT_IMAGE,
-          SETTING_KEYS.ANT_MEDIA_APPNAME
+          SETTING_KEYS.ANT_MEDIA_APPNAME,
         ])
       )
     );
@@ -215,7 +216,7 @@ class Application extends App<IApp> {
     // load configuration from ENV and put to config
     if (!process.browser) {
       // eslint-disable-next-line global-require
-      const dotenv = require('dotenv');
+      const dotenv = require("dotenv");
       const myEnv = dotenv.config().parsed;
 
       // publish to server config with app
@@ -223,7 +224,7 @@ class Application extends App<IApp> {
 
       // load public config and api-endpoint?
       Object.keys(myEnv).forEach((key) => {
-        if (key.indexOf('NEXT_PUBLIC_') === 0) {
+        if (key.indexOf("NEXT_PUBLIC_") === 0) {
           publicConfig[key] = myEnv[key];
         }
       });
@@ -237,13 +238,13 @@ class Application extends App<IApp> {
     if (!process.browser) {
       const [_settings, _banner] = await Promise.all([
         settingService.all(),
-        bannerService.search({ status: 'active' })
+        bannerService.search({ status: "active" }),
       ]);
       // TODO encrypt, decypt header script, footer script or other info if needed
       settings = _settings.data || {};
       await updateSettingsStore(ctx, {
         ...settings,
-        banners: _banner?.data?.data || []
+        banners: _banner?.data?.data || [],
       });
     }
 
@@ -257,7 +258,7 @@ class Application extends App<IApp> {
       settings,
       pageProps,
       layout: Component.layout,
-      config: publicConfig
+      config: publicConfig,
     };
   }
 
@@ -267,19 +268,17 @@ class Application extends App<IApp> {
   }
 
   render() {
-    const {
-      Component, pageProps, store, settings
-    } = this.props;
+    const { Component, pageProps, store, settings } = this.props;
 
     const { layout } = Component;
     return (
       <Provider store={store}>
         <Head>
           <title>
-            {typeof settings.siteName === 'string'
-            && settings.siteName.length > 0
+            {typeof settings.siteName === "string" &&
+            settings.siteName.length > 0
               ? settings.siteName
-              : 'Application'}
+              : "Application"}
           </title>
           <meta
             name="viewport"

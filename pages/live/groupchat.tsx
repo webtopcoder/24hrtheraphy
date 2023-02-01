@@ -1,31 +1,31 @@
-import './index.less';
-import { PureComponent } from 'react';
-import Header from 'next/head';
-import { Row, Col, message } from 'antd';
-import GroupChatContainer from '@components/streaming/group-streaming-container';
-import { IPerformer, IUser } from 'src/interfaces';
-import { streamService } from 'src/services';
-import { connect } from 'react-redux';
+import "./index.less";
+import { PureComponent } from "react";
+import Header from "next/head";
+import { Row, Col, message } from "antd";
+import GroupChatContainer from "@components/streaming/group-streaming-container";
+import { IPerformer, IUser } from "src/interfaces";
+import { streamService } from "src/services";
+import { connect } from "react-redux";
 import {
   getStreamConversationSuccess,
   resetStreamMessage,
   getStreamConversation,
-  resetStreamConversation
-} from '@redux/stream-chat/actions';
-import { SocketContext, Event } from 'src/socket';
-import ChatBox from '@components/stream-chat/chat-box';
-import Router from 'next/router';
-import { Description } from '@components/streaming';
-import { getResponseError } from '@lib/utils';
-import { updateCurrentPerformerBalance } from '@redux/performer/actions';
+  resetStreamConversation,
+} from "@redux/stream-chat/actions";
+import { SocketContext, Event } from "src/socket";
+import ChatBox from "@components/stream-chat/chat-box";
+import Router from "next/router";
+import { Description } from "@components/streaming";
+import { getResponseError } from "@lib/utils";
+import { updateCurrentPerformerBalance } from "@redux/performer/actions";
 
 // eslint-disable-next-line no-shadow
 enum STREAM_EVENT {
-  JOINED_THE_ROOM = 'JOINED_THE_ROOM',
-  JOIN_ROOM = 'JOIN_ROOM',
-  LEAVE_ROOM = 'LEAVE_ROOM',
-  RECEIVED_PAID_TOKEN = 'RECEIVED_PAID_TOKEN',
-  STREAM_INFORMATION_CHANGED = 'private-stream/streamInformationChanged'
+  JOINED_THE_ROOM = "JOINED_THE_ROOM",
+  JOIN_ROOM = "JOIN_ROOM",
+  LEAVE_ROOM = "LEAVE_ROOM",
+  RECEIVED_PAID_TOKEN = "RECEIVED_PAID_TOKEN",
+  STREAM_INFORMATION_CHANGED = "private-stream/streamInformationChanged",
 }
 
 interface IProps {
@@ -60,19 +60,19 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
       roomJoined: false,
       total: 0,
       receivedToken: 0,
-      members: []
+      members: [],
     };
   }
 
   componentDidMount() {
-    this.socket = this.context;
-    window.addEventListener('beforeunload', this.onbeforeunload);
-    Router.events.on('routeChangeStart', this.onbeforeunload);
+    this.socket = this.context as any;
+    window.addEventListener("beforeunload", this.onbeforeunload);
+    Router.events.on("routeChangeStart", this.onbeforeunload);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
-    Router.events.off('routeChangeStart', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    Router.events.off("routeChangeStart", this.onbeforeunload);
   }
 
   handler({ total, members, conversationId }) {
@@ -80,7 +80,7 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
     if (activeConversation?.data?._id === conversationId) {
       this.setState({
         total,
-        members
+        members,
       });
     }
   }
@@ -90,12 +90,15 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
   };
 
   receivedPaidTokenHandler = ({ token, conversationId }) => {
-    const { activeConversation, updateCurrentPerformerBalance: dispatchUpdateCurrentPerformerBalance } = this.props;
+    const {
+      activeConversation,
+      updateCurrentPerformerBalance: dispatchUpdateCurrentPerformerBalance,
+    } = this.props;
     const { receivedToken } = this.state;
     if (activeConversation?.data?._id === conversationId) {
       dispatchUpdateCurrentPerformerBalance(token);
       this.setState({
-        receivedToken: receivedToken + token
+        receivedToken: receivedToken + token,
       });
     }
   };
@@ -104,12 +107,13 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
     const {
       activeConversation,
       resetStreamMessage: dispatchResetStreamMessage,
-      resetStreamConversation: dispatchResetStreamConversation
+      resetStreamConversation: dispatchResetStreamConversation,
     } = this.props;
     if (activeConversation?.data?._id) {
-      this.socket && this.socket.emit(STREAM_EVENT.LEAVE_ROOM, {
-        conversationId: activeConversation.data._id
-      });
+      this.socket &&
+        this.socket.emit(STREAM_EVENT.LEAVE_ROOM, {
+          conversationId: activeConversation.data._id,
+        });
       this.socket && this.socket.off(STREAM_EVENT.RECEIVED_PAID_TOKEN);
       dispatchResetStreamMessage();
       dispatchResetStreamConversation();
@@ -118,30 +122,30 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
       roomJoined: false,
       total: 0,
       receivedToken: 0,
-      members: []
+      members: [],
     });
   }
 
   async startConversation() {
     const {
       getStreamConversation: dispatchGetStreamConversation,
-      getStreamConversationSuccess: dispatchGetStreamConversationSuccess
+      getStreamConversationSuccess: dispatchGetStreamConversationSuccess,
     } = this.props;
     try {
       const resp = await streamService.startGroupChat();
       if (resp && resp.data) {
-        this.socket = this.context;
-        this.streamRef
-          && this.streamRef.start(resp.data.sessionId, resp.data.conversation._id);
+        this.socket = this.context as any;
+        this.streamRef &&
+          this.streamRef.start(resp.data.sessionId, resp.data.conversation._id);
         dispatchGetStreamConversationSuccess({
-          data: resp.data.conversation
+          data: resp.data.conversation,
         });
         dispatchGetStreamConversation({
-          conversation: resp.data.conversation
+          conversation: resp.data.conversation,
         });
-        this.socket
-          && this.socket.emit(STREAM_EVENT.JOIN_ROOM, {
-            conversationId: resp.data.conversation._id
+        this.socket &&
+          this.socket.emit(STREAM_EVENT.JOIN_ROOM, {
+            conversationId: resp.data.conversation._id,
           });
       }
     } catch (e) {
@@ -152,23 +156,17 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
 
   roomJoinedHandler({ total, members, conversationId }) {
     const { activeConversation } = this.props;
-    if (
-      activeConversation?.data?._id === conversationId) {
+    if (activeConversation?.data?._id === conversationId) {
       this.setState({
         total,
         members,
-        roomJoined: true
+        roomJoined: true,
       });
     }
   }
 
   render() {
-    const {
-      total,
-      members,
-      roomJoined,
-      receivedToken
-    } = this.state;
+    const { total, members, roomJoined, receivedToken } = this.state;
     return (
       <>
         <Header>
@@ -189,8 +187,10 @@ class PerformerGroupChat extends PureComponent<IProps, IStates> {
         <Row>
           <Col md={12} xs={24}>
             <GroupChatContainer
-              ref={(ref) => { this.streamRef = ref; }}
-              configs={{ localVideoId: 'localVideoId' }}
+              ref={(ref) => {
+                this.streamRef = ref;
+              }}
+              configs={{ localVideoId: "localVideoId" }}
               onClick={this.startConversation.bind(this)}
             />
             <Description
@@ -216,13 +216,13 @@ PerformerGroupChat.contextType = SocketContext;
 const mapStateToProps = (state) => ({
   user: state.user.current,
   loggedIn: state.auth.loggedIn,
-  activeConversation: state.streamMessage.activeConversation
+  activeConversation: state.streamMessage.activeConversation,
 });
 const mapDispatchs = {
   getStreamConversation,
   resetStreamMessage,
   resetStreamConversation,
   updateCurrentPerformerBalance,
-  getStreamConversationSuccess
+  getStreamConversationSuccess,
 };
 export default connect(mapStateToProps, mapDispatchs)(PerformerGroupChat);

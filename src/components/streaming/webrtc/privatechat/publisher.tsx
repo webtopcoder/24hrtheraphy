@@ -1,15 +1,18 @@
 /* eslint-disable camelcase */
-import { StreamSettings } from 'src/interfaces';
-import { streamService } from 'src/services';
-import Router from 'next/router';
-import React, { PureComponent } from 'react';
-import withAntmedia from 'src/antmedia';
-import { WEBRTC_ADAPTOR_INFORMATIONS } from 'src/antmedia/constants';
-import { SocketContext } from 'src/socket';
-import videojs from 'video.js';
-import './index.less';
-import { WebRTCAdaptorConfigs, WebRTCAdaptorProps } from 'src/antmedia/interfaces';
-import { isMobile } from 'react-device-detect';
+import { StreamSettings } from "src/interfaces";
+import { streamService } from "src/services";
+import Router from "next/router";
+import React, { PureComponent } from "react";
+import withAntmedia from "src/antmedia";
+import { WEBRTC_ADAPTOR_INFORMATIONS } from "src/antmedia/constants";
+import { SocketContext } from "src/socket";
+import videojs from "video.js";
+import "./index.less";
+import {
+  WebRTCAdaptorConfigs,
+  WebRTCAdaptorProps,
+} from "src/antmedia/interfaces";
+import { isMobile } from "react-device-detect";
 
 interface IProps extends WebRTCAdaptorProps {
   settings: StreamSettings;
@@ -30,19 +33,19 @@ class Publisher extends PureComponent<IProps, States> {
     super(props);
     this.state = {
       conversationId: null,
-      streamId: null
+      streamId: null,
     };
   }
 
   componentDidMount() {
-    this.socket = this.context;
-    Router.events.on('routeChangeStart', this.onbeforeunload);
-    window.addEventListener('beforeunload', this.onbeforeunload);
+    this.socket = this.context as any;
+    Router.events.on("routeChangeStart", this.onbeforeunload);
+    window.addEventListener("beforeunload", this.onbeforeunload);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
-    Router.events.off('routeChangeStart', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    Router.events.off("routeChangeStart", this.onbeforeunload);
   }
 
   onbeforeunload = () => {
@@ -50,9 +53,9 @@ class Publisher extends PureComponent<IProps, States> {
     const { conversationId, streamId } = this.state;
     if (streamId && publish_started) {
       webRTCAdaptor && webRTCAdaptor.leaveFromRoom(conversationId);
-      this.socket.emit('private-stream/leave', {
+      this.socket.emit("private-stream/leave", {
         conversationId,
-        streamId
+        streamId,
       });
     }
 
@@ -63,14 +66,15 @@ class Publisher extends PureComponent<IProps, States> {
 
     this.setState({
       conversationId: null,
-      streamId: null
+      streamId: null,
     });
   };
 
-  async handelWebRTCAdaptorCallback(info: WEBRTC_ADAPTOR_INFORMATIONS, obj: any) {
-    const {
-      webRTCAdaptor, settings, configs
-    } = this.props;
+  async handelWebRTCAdaptorCallback(
+    info: WEBRTC_ADAPTOR_INFORMATIONS,
+    obj: any
+  ) {
+    const { webRTCAdaptor, settings, configs } = this.props;
     const { conversationId, streamId } = this.state;
     if (info === WEBRTC_ADAPTOR_INFORMATIONS.INITIALIZED) {
       webRTCAdaptor.joinRoom(conversationId, streamId);
@@ -89,24 +93,24 @@ class Publisher extends PureComponent<IProps, States> {
             currentTimeDisplay: false,
             fullscreenToggle: false,
             pictureInPictureToggle: false,
-            volumePanel: false
-          }
+            volumePanel: false,
+          },
         });
-        player.on('error', () => {
+        player.on("error", () => {
           player.error(null);
         });
-        player.one('play', () => {
+        player.one("play", () => {
           this.publisher = player;
         });
       }
-      this.socket.emit('private-stream/join', {
+      this.socket.emit("private-stream/join", {
         conversationId,
-        streamId: obj.streamId
+        streamId: obj.streamId,
       });
     } else if (info === WEBRTC_ADAPTOR_INFORMATIONS.PUBLISH_FINISHED) {
-      this.socket.emit('private-stream/leave', {
+      this.socket.emit("private-stream/leave", {
         conversationId,
-        streamId: obj.streamId
+        streamId: obj.streamId,
       });
     }
   }

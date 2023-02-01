@@ -1,8 +1,8 @@
 /* eslint-disable dot-notation */
-import React, { PureComponent } from 'react';
-import Head from 'next/head';
-import { Row, Col, message } from 'antd';
-import { IResponse } from 'src/services/api-request';
+import React, { PureComponent } from "react";
+import Head from "next/head";
+import { Row, Col, message } from "antd";
+import { IResponse } from "src/services/api-request";
 import {
   IPerformer,
   IUser,
@@ -13,61 +13,61 @@ import {
   IProduct,
   IVideo,
   IPhoto,
-  IPerformerGallery
-} from 'src/interfaces';
-import { connect } from 'react-redux';
-import { streamService, performerService, messageService } from 'src/services';
-import { SocketContext, Event } from 'src/socket';
-import nextCookie from 'next-cookies';
-import ModalBuyAssets from '@components/performer-assets/common/modal-buy-assets';
-import PerformerProduct from '@components/performer-assets/product-carousel';
-import PerformerVideo from '@components/performer-assets/video-carousel';
-import PerformerGallery from '@components/performer-assets/gallery-carousel';
-import ProfileCard from '@components/performer/profile-card';
-import PerformerCarousel from '@components/performer/performer-carousel';
-import Header from '@components/streaming/header';
-import Footer from '@components/streaming/footer';
-import Router from 'next/router';
-import ChatBox from '@components/stream-chat/chat-box';
-import LiveSubscriber from 'src/components/streaming/subscriber';
+  IPerformerGallery,
+} from "src/interfaces";
+import { connect } from "react-redux";
+import { streamService, performerService, messageService } from "src/services";
+import { SocketContext, Event } from "src/socket";
+import nextCookie from "next-cookies";
+import ModalBuyAssets from "@components/performer-assets/common/modal-buy-assets";
+import PerformerProduct from "@components/performer-assets/product-carousel";
+import PerformerVideo from "@components/performer-assets/video-carousel";
+import PerformerGallery from "@components/performer-assets/gallery-carousel";
+import ProfileCard from "@components/performer/profile-card";
+import PerformerCarousel from "@components/performer/performer-carousel";
+import Header from "@components/streaming/header";
+import Footer from "@components/streaming/footer";
+import Router from "next/router";
+import ChatBox from "@components/stream-chat/chat-box";
+import LiveSubscriber from "src/components/streaming/subscriber";
 import {
   loadStreamMessages,
   getStreamConversationSuccess,
   receiveStreamMessageSuccess,
   resetStreamMessage,
   resetAllStreamMessage,
-  resetStreamConversation
-} from '@redux/stream-chat/actions';
+  resetStreamConversation,
+} from "@redux/stream-chat/actions";
 import {
   getPerformerDetails,
-  updatePerformerAsset
-} from '@redux/performer/actions';
-import { updateCurrentUserBalance } from '@redux/user/actions';
-import { getResponseError } from '@lib/utils';
-import { StatusCodes } from 'http-status-codes';
-import './index.less';
-import { currentUserSelecter } from '@redux/selectors';
-import { getPoster } from '@lib/stream';
+  updatePerformerAsset,
+} from "@redux/performer/actions";
+import { updateCurrentUserBalance } from "@redux/user/actions";
+import { getResponseError } from "@lib/utils";
+import { StatusCodes } from "http-status-codes";
+import "./index.less";
+import { currentUserSelecter } from "@redux/selectors";
+import { getPoster } from "@lib/stream";
 
 // eslint-disable-next-line no-shadow
 enum PERFORMER_ASSETS_TYPE {
-  PRODUCT = 'product',
-  GALLERY = 'gallery',
-  VIDEO = 'video'
+  PRODUCT = "product",
+  GALLERY = "gallery",
+  VIDEO = "video",
 }
 
 // eslint-disable-next-line no-shadow
 enum STREAM_EVENT {
-  JOIN_BROADCASTER = 'join-broadcaster',
-  MODEL_LEFT = 'model-left',
-  ROOM_INFORMATIOM_CHANGED = 'public-room-changed',
-  MODEL_UPDATE_STREAMING_STATUS = 'modelUpdateStreamingStatus',
-  USER_LEFT_ROOM = 'USER_LEFT_ROOM'
+  JOIN_BROADCASTER = "join-broadcaster",
+  MODEL_LEFT = "model-left",
+  ROOM_INFORMATIOM_CHANGED = "public-room-changed",
+  MODEL_UPDATE_STREAMING_STATUS = "modelUpdateStreamingStatus",
+  USER_LEFT_ROOM = "USER_LEFT_ROOM",
 }
 
 // eslint-disable-next-line no-shadow
 enum EVENT {
-  BLOCK_USERS = 'nofify_users_block'
+  BLOCK_USERS = "nofify_users_block",
 }
 
 interface IProps {
@@ -115,7 +115,7 @@ class LivePage extends PureComponent<IProps, IStates> {
       const { query } = ctx;
       if (process.browser && query.performer) {
         return {
-          performer: JSON.parse(query.performer)
+          performer: JSON.parse(query.performer),
         };
       }
 
@@ -131,15 +131,15 @@ class LivePage extends PureComponent<IProps, IStates> {
       }
 
       return {
-        performer
+        performer,
       };
     } catch (e) {
       // const err = await PromisePurchaseItemModelresolve(e);
       if (process.browser) {
-        return Router.push('/');
+        return Router.push("/");
       }
 
-      ctx.res.writeHead && ctx.res.writeHead(302, { Location: '/' });
+      ctx.res.writeHead && ctx.res.writeHead(302, { Location: "/" });
       ctx.res.end && ctx.res.end();
       return {};
     }
@@ -149,7 +149,7 @@ class LivePage extends PureComponent<IProps, IStates> {
     super(props);
     this.state = {
       total: 0,
-      members: []
+      members: [],
     };
   }
 
@@ -158,30 +158,30 @@ class LivePage extends PureComponent<IProps, IStates> {
     this.buyAssetsRef = React.createRef();
     const { performer, user } = this.props;
     if (!performer) {
-      Router.push('/');
+      Router.push("/");
       return;
     }
 
-    if (user && user.role === 'performer') {
-      Router.push('/live');
+    if (user && user.role === "performer") {
+      Router.push("/live");
       return;
     }
 
-    if (user && user.role === 'studio') {
-      Router.push('/studio/account-settings');
+    if (user && user.role === "studio") {
+      Router.push("/studio/account-settings");
       return;
     }
 
-    this.socket = this.context;
-    Router.events.on('routeChangeStart', this.onbeforeunload);
-    window.addEventListener('beforeunload', this.onbeforeunload);
+    this.socket = this.context as any;
+    Router.events.on("routeChangeStart", this.onbeforeunload);
+    window.addEventListener("beforeunload", this.onbeforeunload);
     this.initProfilePage();
   }
 
   componentDidUpdate(prevProps: IProps) {
     const { performer, data, activeConversation } = this.props;
     if (data && data.isBlocked) {
-      Router.push('/403');
+      Router.push("/403");
       return;
     }
 
@@ -190,16 +190,16 @@ class LivePage extends PureComponent<IProps, IStates> {
     }
 
     if (prevProps.activeConversation !== activeConversation) {
-      prevProps.activeConversation?._id
-        && this.socket.emit('public-stream/leave', {
-          conversationId: prevProps.activeConversation._id
+      prevProps.activeConversation?._id &&
+        this.socket.emit("public-stream/leave", {
+          conversationId: prevProps.activeConversation._id,
         });
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
-    Router.events.off('routeChangeStart', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    Router.events.off("routeChangeStart", this.onbeforeunload);
   }
 
   onChange({ total, members, conversationId }) {
@@ -222,7 +222,7 @@ class LivePage extends PureComponent<IProps, IStates> {
     const {
       performer,
       loadStreamMessages: dispatchLoadStreamMessages,
-      getStreamConversationSuccess: dispatchGetStreamConversationSuccess
+      getStreamConversationSuccess: dispatchGetStreamConversationSuccess,
     } = this.props;
     if (performer) {
       try {
@@ -237,15 +237,17 @@ class LivePage extends PureComponent<IProps, IStates> {
             conversationId: conversation._id,
             limit: 25,
             offset: 0,
-            type: conversation.type
+            type: conversation.type,
           });
-          this.socket = this.context;
-          this.socket
-            && this.socket.emit('public-stream/join', {
-              conversationId: conversation._id
+          this.socket = this.context as any;
+          this.socket &&
+            this.socket.emit("public-stream/join", {
+              conversationId: conversation._id,
             });
         } else {
-          throw new Promise((resolve) => resolve('No available broadcast. Try again later'));
+          throw new Promise((resolve) =>
+            resolve("No available broadcast. Try again later")
+          );
         }
       } catch (e) {
         const error = await Promise.resolve(e);
@@ -260,11 +262,11 @@ class LivePage extends PureComponent<IProps, IStates> {
     const {
       performer,
       performer: { streamingStatus },
-      getPerformerDetails: dispatchGetPerformerDetail
+      getPerformerDetails: dispatchGetPerformerDetail,
     } = this.props;
     setTimeout(() => {
-      this.subscriberRef.current
-        && this.subscriberRef.current.resetPlaybackVideo(
+      this.subscriberRef.current &&
+        this.subscriberRef.current.resetPlaybackVideo(
           getPoster(streamingStatus)
         );
     }, 100);
@@ -277,7 +279,7 @@ class LivePage extends PureComponent<IProps, IStates> {
     try {
       const {
         settings: { optionForBroadcast },
-        performer
+        performer,
       } = this.props;
       if (performer._id !== performerId) {
         return;
@@ -300,12 +302,12 @@ class LivePage extends PureComponent<IProps, IStates> {
     const {
       activeConversation,
       resetStreamMessage: dispatchResetStreamMessage,
-      resetStreamConversation: dispatchResetStreamConversation
+      resetStreamConversation: dispatchResetStreamConversation,
     } = this.props;
     dispatchResetStreamMessage();
     if (this.socket && activeConversation?.data?._id) {
-      this.socket.emit('public-stream/leave', {
-        conversationId: activeConversation.data._id
+      this.socket.emit("public-stream/leave", {
+        conversationId: activeConversation.data._id,
       });
     }
 
@@ -313,7 +315,7 @@ class LivePage extends PureComponent<IProps, IStates> {
 
     this.setState({
       total: 0,
-      members: []
+      members: [],
     });
   }
 
@@ -324,31 +326,29 @@ class LivePage extends PureComponent<IProps, IStates> {
     }
 
     this.subscriberRef.current?.stop();
-    message.info('Model has left the room!');
+    message.info("Model has left the room!");
   }
 
   async showAssetToBuy(type: PERFORMER_ASSETS_TYPE, item) {
-    const {
-      isBought, isSale, name, type: itemType
-    } = item;
+    const { isBought, isSale, name, type: itemType } = item;
     switch (type) {
-      case 'gallery':
+      case "gallery":
         if (isBought || !isSale) {
           Router.push(
             {
-              pathname: '/photos',
+              pathname: "/photos",
               query: {
                 data: JSON.stringify(item),
-                id: item._id
-              }
+                id: item._id,
+              },
             },
             `/photos/${item._id}`
           );
           return;
         }
         break;
-      case 'product':
-        if (isBought && itemType === 'digital') {
+      case "product":
+        if (isBought && itemType === "digital") {
           message.info(
             `You have purchased ${name} already. Please check your email!`
           );
@@ -364,7 +364,7 @@ class LivePage extends PureComponent<IProps, IStates> {
   userBlockHandler({ performerId }) {
     const { performer } = this.props;
     if (performerId === performer._id) {
-      Router.push('/403');
+      Router.push("/403");
     }
   }
 
@@ -372,10 +372,8 @@ class LivePage extends PureComponent<IProps, IStates> {
     const { performer } = this.props;
     if (id === performer._id) {
       setTimeout(() => {
-        this.subscriberRef.current
-          && this.subscriberRef.current.poster(
-            getPoster(status)
-          );
+        this.subscriberRef.current &&
+          this.subscriberRef.current.poster(getPoster(status));
       }, 100);
     }
   }
@@ -383,7 +381,7 @@ class LivePage extends PureComponent<IProps, IStates> {
   async inscreaseView() {
     try {
       const {
-        performer: { _id: id }
+        performer: { _id: id },
       } = this.props;
       await performerService.increaseView(id);
       // eslint-disable-next-line no-empty
@@ -398,7 +396,7 @@ class LivePage extends PureComponent<IProps, IStates> {
       if (leftMemberIndex > -1) {
         this.setState({
           total: total - 1,
-          members: members.splice(leftMemberIndex, 1)
+          members: members.splice(leftMemberIndex, 1),
         });
       }
     }
@@ -413,7 +411,7 @@ class LivePage extends PureComponent<IProps, IStates> {
       products,
       videos,
       galleries,
-      ui
+      ui,
     } = this.props;
     const { members, total } = this.state;
     return (
@@ -463,7 +461,7 @@ class LivePage extends PureComponent<IProps, IStates> {
               <LiveSubscriber
                 ref={this.subscriberRef}
                 configs={{
-                  isPlayMode: true
+                  isPlayMode: true,
                 }}
               />
               <Footer {...this.props} />
@@ -479,7 +477,7 @@ class LivePage extends PureComponent<IProps, IStates> {
           <Row
             gutter={[
               { sm: 25, xs: 0 },
-              { sm: 10, xs: 25 }
+              { sm: 10, xs: 25 },
             ]}
           >
             <Col xs={{ span: 24 }} lg={{ span: 8 }}>
@@ -496,7 +494,7 @@ class LivePage extends PureComponent<IProps, IStates> {
                 products={products}
                 searching={searching}
                 success={success}
-                purchaseProduct={this.showAssetToBuy.bind(this, 'product')}
+                purchaseProduct={this.showAssetToBuy.bind(this, "product")}
               />
               <PerformerVideo
                 performer={data}
@@ -509,7 +507,7 @@ class LivePage extends PureComponent<IProps, IStates> {
                 galleries={galleries}
                 searching={searching}
                 success={success}
-                purchaseGallery={this.showAssetToBuy.bind(this, 'gallery')}
+                purchaseGallery={this.showAssetToBuy.bind(this, "gallery")}
               />
               <PerformerCarousel
                 performers={data && data.relatedPerformers}
@@ -531,7 +529,7 @@ const mapStateToProps = (state) => ({
   ...state.performer.performerDetails,
   user: currentUserSelecter(state),
   loggedIn: state.auth.loggedIn,
-  activeConversation: state.streamMessage.activeConversation
+  activeConversation: state.streamMessage.activeConversation,
 });
 const mapDispatch = {
   loadStreamMessages,
@@ -542,6 +540,6 @@ const mapDispatch = {
   updateCurrentUserBalance,
   getPerformerDetails,
   updatePerformerAsset,
-  resetStreamConversation
+  resetStreamConversation,
 };
 export default connect(mapStateToProps, mapDispatch)(LivePage);

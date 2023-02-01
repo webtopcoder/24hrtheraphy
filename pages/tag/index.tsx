@@ -1,24 +1,22 @@
-import React, { PureComponent } from 'react';
-import Head from 'next/head';
-import Router, { withRouter, NextRouter } from 'next/router';
-import { connect } from 'react-redux';
-import { IPerformer, IPerformSearch } from 'src/interfaces';
-import PerformerGrid from '@components/performer/performer-grid';
+import React, { PureComponent } from "react";
+import Head from "next/head";
+import Router, { withRouter, NextRouter } from "next/router";
+import { connect } from "react-redux";
+import { IPerformer, IPerformSearch } from "src/interfaces";
+import PerformerGrid from "@components/performer/performer-grid";
 import {
   searchPerformer,
-  updatePerformerFavourite
-} from '@redux/performer/actions';
-import Error from 'pages/_error';
-import {
-  Button, Row, Col, message
-} from 'antd';
-import PageHeader from '@components/common/layout/page-header';
-import { GENNDER_PERFORMER } from '@services/perfomer.service';
-import { favouriteService } from 'src/services';
-import { getResponseError } from 'src/lib';
+  updatePerformerFavourite,
+} from "@redux/performer/actions";
+import Error from "pages/_error";
+import { Button, Row, Col, message } from "antd";
+import PageHeader from "@components/common/layout/page-header";
+import { GENNDER_PERFORMER } from "@services/perfomer.service";
+import { favouriteService } from "src/services";
+import { getResponseError } from "src/lib";
 
-import './index.less';
-import { SocketContext } from 'src/socket';
+import "./index.less";
+import { SocketContext } from "src/socket";
 
 interface Props {
   success: boolean;
@@ -43,17 +41,17 @@ interface States {
 const initQueryState: IPerformSearch = {
   offset: 0,
   limit: 100,
-  gender: '',
-  category: '',
-  country: '',
-  sortBy: '',
-  sort: 'desc'
+  gender: "",
+  category: "",
+  country: "",
+  sortBy: "",
+  sort: "desc",
 };
 
 const focusStyle: React.CSSProperties = {
-  color: '#ff2977',
-  backgroundColor: '#fff',
-  borderColor: '#ff2977'
+  color: "#ff2977",
+  backgroundColor: "#fff",
+  borderColor: "#ff2977",
 };
 
 class PerformerTagPage extends PureComponent<Props, States> {
@@ -62,15 +60,15 @@ class PerformerTagPage extends PureComponent<Props, States> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      query: initQueryState
+      query: initQueryState,
     };
   }
 
   componentDidMount() {
     this.search();
-    this.socket = this.context;
-    this.socket.on('modelUpdateStatus', this.search);
-    this.socket.on('modelUpdateStreamingStatus', this.search);
+    this.socket = this.context as any;
+    this.socket.on("modelUpdateStatus", this.search);
+    this.socket.on("modelUpdateStreamingStatus", this.search);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -84,18 +82,17 @@ class PerformerTagPage extends PureComponent<Props, States> {
   }
 
   componentWillUnmount() {
-    this.socket = this.context;
+    this.socket = this.context as any;
     if (this.socket) {
-      this.socket.off('modelUpdateStatus');
-      this.socket.off('modelUpdateStreamingStatus');
+      this.socket.off("modelUpdateStatus");
+      this.socket.off("modelUpdateStreamingStatus");
     }
   }
 
   async onLike(performer: IPerformer) {
     const { _id, isFavorite } = performer;
-    const {
-      updatePerformerFavourite: dispatchUpdatePerformerFavourite
-    } = this.props;
+    const { updatePerformerFavourite: dispatchUpdatePerformerFavourite } =
+      this.props;
     try {
       await favouriteService.favorite(_id, isFavorite);
       dispatchUpdatePerformerFavourite(_id);
@@ -109,18 +106,18 @@ class PerformerTagPage extends PureComponent<Props, States> {
     const { searchPerformer: dispatchSearchPerformer, router } = this.props;
     const { query } = this.state;
     dispatchSearchPerformer({ ...router.query, ...query });
-  }
+  };
 
   filter(name: string, value: any) {
     const { router } = this.props;
     const { query } = this.state;
     Router.push({
-      pathname: '/tag',
+      pathname: "/tag",
       query: {
         ...router.query,
         ...query,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   }
 
@@ -133,10 +130,7 @@ class PerformerTagPage extends PureComponent<Props, States> {
     return (
       <>
         <Head>
-          <title>
-            Models -
-            {tags}
-          </title>
+          <title>Models -{tags}</title>
         </Head>
         <div className="">
           <PageHeader title={tags} />
@@ -145,7 +139,7 @@ class PerformerTagPage extends PureComponent<Props, States> {
               {GENNDER_PERFORMER.map((gender) => (
                 <Button
                   key={gender}
-                  onClick={this.filter.bind(this, 'gender', gender)}
+                  onClick={this.filter.bind(this, "gender", gender)}
                   type="dashed"
                   style={gender === query.gender ? { ...focusStyle } : {}}
                 >
@@ -171,7 +165,7 @@ PerformerTagPage.contextType = SocketContext;
 
 const mapStateToProps = (state) => ({
   loggedIn: state.auth.loggedIn,
-  ...state.performer.performers
+  ...state.performer.performers,
 });
 const mapDispatch = { searchPerformer, updatePerformerFavourite };
 export default withRouter(

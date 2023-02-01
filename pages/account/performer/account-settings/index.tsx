@@ -1,48 +1,46 @@
-import React, { PureComponent } from 'react';
-import {
-  message, Tabs, Form, Button, Collapse
-} from 'antd';
-import PageHeader from '@components/common/layout/page-header';
-import { connect } from 'react-redux';
+import React, { PureComponent } from "react";
+import { message, Tabs, Form, Button, Collapse } from "antd";
+import PageHeader from "@components/common/layout/page-header";
+import { connect } from "react-redux";
 import {
   ICountries,
   IPerformer,
   IUpdatePasswordFormData,
-  PAYMENT_ACCOUNT
-} from 'src/interfaces';
-import Head from 'next/head';
-import ContactSettingForm from '@components/performer/contact-setting-form';
+  PAYMENT_ACCOUNT,
+} from "src/interfaces";
+import Head from "next/head";
+import ContactSettingForm from "@components/performer/contact-setting-form";
 import {
   WireTransferSettingForm,
   PaypalSettingFrom,
   IssueCheckUSSetingForm,
   DirectDepositSettingForm,
   BitpaySettigForm,
-  PaxumSettingForm
-} from '@components/payment';
-import CommissionCard from '@components/commission/commission-card';
-import DisableAccountForm from '@components/performer/settings/disable-account-form';
-import DefaultPriceForm from '@components/performer/settings/default-price-form';
+  PaxumSettingForm,
+} from "@components/payment";
+import CommissionCard from "@components/commission/commission-card";
+import DisableAccountForm from "@components/performer/settings/disable-account-form";
+import DefaultPriceForm from "@components/performer/settings/default-price-form";
 import {
   updatePerformerProfile,
   updatePaymentInfo,
   updateDirectDeposit,
   updateBitpay,
   updatePaxum,
-  updateDefaultPrice
-} from 'src/redux/performer/actions';
-import { updatePassword, logout } from 'src/redux/auth/actions';
-import { getResponseError } from '@lib/utils';
-import { performerService, paymentInformationService } from 'src/services';
-import Router from 'next/router';
-import PasswordChange from '@components/auth/password-change';
-import DocumentsSettingForm from '@components/performer/documents-setting-form';
-import Timezones from '@components/common/base/select/timezones';
-import { formItemLayout } from '@lib/layout';
-import BroadcastSetting from '@components/performer/broadcast-setting-form';
+  updateDefaultPrice,
+} from "src/redux/performer/actions";
+import { updatePassword, logout } from "src/redux/auth/actions";
+import { getResponseError } from "@lib/utils";
+import { performerService, paymentInformationService } from "src/services";
+import Router from "next/router";
+import PasswordChange from "@components/auth/password-change";
+import DocumentsSettingForm from "@components/performer/documents-setting-form";
+import Timezones from "@components/common/base/select/timezones";
+import { formItemLayout } from "@lib/layout";
+import BroadcastSetting from "@components/performer/broadcast-setting-form";
 
-import './index.less';
-import { SocketContext } from 'src/socket';
+import "./index.less";
+import { SocketContext } from "src/socket";
 
 const { Panel } = Collapse;
 
@@ -72,12 +70,12 @@ interface IStates {
 class UserProfilePage extends PureComponent<IProps, IStates> {
   static authenticate = true;
 
-  static layout = 'primary';
+  static layout = "primary";
 
   static getInitialProps({ ctx }) {
     const { query } = ctx;
     return {
-      action: query.action
+      action: query.action,
     };
   }
 
@@ -85,8 +83,8 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
     super(props);
     this.state = {
       updatingMaxPearticipantsAllowed: false,
-      paymentInformationKey: '',
-      paymentInformation: {}
+      paymentInformationKey: "",
+      paymentInformation: {},
     };
   }
 
@@ -94,7 +92,7 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
     const { updateSuccess, updateError, auth } = this.props;
     const { paymentInformationKey } = this.state;
     if (prevProps.updateSuccess !== updateSuccess && updateSuccess) {
-      message.success('Update Profile Success.');
+      message.success("Update Profile Success.");
     }
 
     if (prevProps.updateError !== updateError && updateError) {
@@ -102,22 +100,22 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
     }
 
     if (
-      prevProps.auth.updatePassword.success !== auth.updatePassword.success
-      && auth.updatePassword.success
+      prevProps.auth.updatePassword.success !== auth.updatePassword.success &&
+      auth.updatePassword.success
     ) {
-      message.success('Update Password Success.');
+      message.success("Update Password Success.");
     }
 
     if (
-      prevProps.auth.updatePassword.error !== auth.updatePassword.error
-      && auth.updatePassword.error
+      prevProps.auth.updatePassword.error !== auth.updatePassword.error &&
+      auth.updatePassword.error
     ) {
       message.error(getResponseError(auth.updatePassword.error));
     }
 
     if (
-      paymentInformationKey
-      && paymentInformationKey !== prevStates.paymentInformationKey
+      paymentInformationKey &&
+      paymentInformationKey !== prevStates.paymentInformationKey
     ) {
       this.getPaymentInformation();
     }
@@ -126,7 +124,7 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
   onFinish(data: any) {
     const {
       performer,
-      updatePerformerProfile: dispatchupdatePerformerProfile
+      updatePerformerProfile: dispatchupdatePerformerProfile,
     } = this.props;
     dispatchupdatePerformerProfile({ ...performer, ...data });
   }
@@ -134,8 +132,8 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
   onTabsChange(key: string) {
     Router.push(
       {
-        pathname: '/account/performer/account-settings',
-        query: { action: key }
+        pathname: "/account/performer/account-settings",
+        query: { action: key },
       },
       `/account/performer/account-settings?action=${key}`,
       { shallow: false }
@@ -147,7 +145,7 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
     try {
       this.setState({ updatingMaxPearticipantsAllowed: true });
       await performerService.updateBroadcastSetting({ maxParticipantsAllowed });
-      message.success('Update Broadcast Setting Success.');
+      message.success("Update Broadcast Setting Success.");
     } catch (error) {
       const err = await Promise.resolve(error);
       message.error(getResponseError(err));
@@ -158,7 +156,7 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
 
   onPasswordChange(data: IUpdatePasswordFormData) {
     const { updatePassword: dispatchUpdatePassword } = this.props;
-    dispatchUpdatePassword({ ...data, source: 'performer' });
+    dispatchUpdatePassword({ ...data, source: "performer" });
   }
 
   onUpdateDefaultPrice(data) {
@@ -171,7 +169,7 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
       const { logout: dispatchLogout } = this.props;
       const { password } = data;
       await performerService.suspendAccount(password);
-      const socket = this.context;
+      const socket = this.context as any;
       if (socket) {
         socket.disconnect();
       }
@@ -191,9 +189,11 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
     const { paymentInformationKey } = this.state;
     paymentInformationService
       .findOne({ type: paymentInformationKey })
-      .then((resp) => this.setState({
-        paymentInformation: { [paymentInformationKey]: resp.data }
-      }));
+      .then((resp) =>
+        this.setState({
+          paymentInformation: { [paymentInformationKey]: resp.data },
+        })
+      );
   }
 
   async submitPaymentInfoForm(data) {
@@ -201,12 +201,12 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
       const { paymentInformationKey } = this.state;
       const resp = await paymentInformationService.create({
         type: paymentInformationKey,
-        ...data
+        ...data,
       });
       this.setState({
-        paymentInformation: { [paymentInformationKey]: resp.data }
+        paymentInformation: { [paymentInformationKey]: resp.data },
       });
-      message.success('Update Payment Information Success');
+      message.success("Update Payment Information Success");
     } catch (e) {
       const error = await Promise.resolve(e);
       message.error(getResponseError(error));
@@ -214,9 +214,7 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
   }
 
   render() {
-    const {
-      performer, action, auth, updating, countries
-    } = this.props;
+    const { performer, action, auth, updating, countries } = this.props;
     const { updatingMaxPearticipantsAllowed, paymentInformation } = this.state;
     return (
       <>
@@ -226,25 +224,23 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
         <div className="account-setting-page">
           <PageHeader title="Account Settings" />
           <Tabs
-            defaultActiveKey={action || 'commission'}
-            style={{ padding: '0 24px' }}
+            defaultActiveKey={action || "commission"}
+            style={{ padding: "0 24px" }}
             size="large"
             onChange={this.onTabsChange.bind(this)}
           >
             <Tabs.TabPane tab="Commission" key="commission">
-              {
-                performer.studioId
-                  ? (
-                    <p style={{ textAlign: 'center' }}>
-                      Check your commissions below for different transactions after the studio and admin shares.
-                    </p>
-                  )
-                  : (
-                    <p style={{ textAlign: 'center' }}>
-                      Check your commissions below for different transactions after the admin’s cut.
-                    </p>
-                  )
-              }
+              {performer.studioId ? (
+                <p style={{ textAlign: "center" }}>
+                  Check your commissions below for different transactions after
+                  the studio and admin shares.
+                </p>
+              ) : (
+                <p style={{ textAlign: "center" }}>
+                  Check your commissions below for different transactions after
+                  the admin’s cut.
+                </p>
+              )}
               <CommissionCard />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Default Price" key="default-price">
@@ -352,8 +348,8 @@ class UserProfilePage extends PureComponent<IProps, IStates> {
                   rules={[
                     {
                       required: true,
-                      message: 'Please input your timezone!'
-                    }
+                      message: "Please input your timezone!",
+                    },
                   ]}
                 >
                   <Timezones />
@@ -397,7 +393,7 @@ const mapStateToProps = (state) => ({
   updateSuccess: state.performer.updateSuccess,
   updateError: state.performer.updateError,
   countries: state.settings.countries,
-  auth: state.auth
+  auth: state.auth,
 });
 const mapDispatch = {
   updatePerformerProfile,
@@ -407,6 +403,6 @@ const mapDispatch = {
   updateDirectDeposit,
   updateBitpay,
   updatePaxum,
-  updateDefaultPrice
+  updateDefaultPrice,
 };
 export default connect(mapStateToProps, mapDispatch)(UserProfilePage);

@@ -1,50 +1,50 @@
-import React, { PureComponent } from 'react';
-import Head from 'next/head';
+import React, { PureComponent } from "react";
+import Head from "next/head";
+import { Row, Col, message, List, Button } from "antd";
+import Router from "next/router";
+import { IPerformer, IUIConfig, IUser, StreamSettings } from "src/interfaces";
 import {
-  Row, Col, message, List, Button
-} from 'antd';
-import Router from 'next/router';
-import {
-  IPerformer, IUIConfig, IUser, StreamSettings
-} from 'src/interfaces';
-import { performerService, streamService, transactionService } from 'src/services';
-import { connect } from 'react-redux';
+  performerService,
+  streamService,
+  transactionService,
+} from "src/services";
+import { connect } from "react-redux";
 import {
   getStreamConversationSuccess,
   loadMoreStreamMessages,
   resetStreamMessage,
-  resetStreamConversation
-} from '@redux/stream-chat/actions';
-import { updateCurrentUserBalance } from '@redux/user/actions';
-import { SocketContext, Event } from 'src/socket';
-import nextCookie from 'next-cookies';
-import ChatBox from '@components/stream-chat/chat-box';
-import { getResponseError } from '@lib/utils';
-import GroupPublisher from '@components/streaming/webrtc/groupchat/publisher';
-import GroupSubscriber from '@components/streaming/webrtc/groupchat/subscriber';
-import { StatusCodes } from 'http-status-codes';
-import Header from '@components/streaming/header';
-import '../index.less';
+  resetStreamConversation,
+} from "@redux/stream-chat/actions";
+import { updateCurrentUserBalance } from "@redux/user/actions";
+import { SocketContext, Event } from "src/socket";
+import nextCookie from "next-cookies";
+import ChatBox from "@components/stream-chat/chat-box";
+import { getResponseError } from "@lib/utils";
+import GroupPublisher from "@components/streaming/webrtc/groupchat/publisher";
+import GroupSubscriber from "@components/streaming/webrtc/groupchat/subscriber";
+import { StatusCodes } from "http-status-codes";
+import Header from "@components/streaming/header";
+import "../index.less";
 
 // eslint-disable-next-line no-shadow
 enum EVENT {
-  JOIN_ROOM = 'JOIN_ROOM',
-  LEAVE_ROOM = 'LEAVE_ROOM',
-  STREAM_INFORMATION_CHANGED = 'private-stream/streamInformationChanged',
-  SEND_PAID_TOKEN = 'SEND_PAID_TOKEN'
+  JOIN_ROOM = "JOIN_ROOM",
+  LEAVE_ROOM = "LEAVE_ROOM",
+  STREAM_INFORMATION_CHANGED = "private-stream/streamInformationChanged",
+  SEND_PAID_TOKEN = "SEND_PAID_TOKEN",
 }
-const JOINED_THE_ROOM = 'JOINED_THE_ROOM';
-const MODEL_LEFT_ROOM = 'MODEL_LEFT_ROOM';
-const STREAM_JOINED = 'private-stream/streamJoined';
-const STREAM_LEAVED = 'private-stream/streamLeaved';
+const JOINED_THE_ROOM = "JOINED_THE_ROOM";
+const MODEL_LEFT_ROOM = "MODEL_LEFT_ROOM";
+const STREAM_JOINED = "private-stream/streamJoined";
+const STREAM_LEAVED = "private-stream/streamLeaved";
 
 const ListItem = ({ description, title }: any) => (
   <List.Item>
-    <Row style={{ width: '100%' }}>
+    <Row style={{ width: "100%" }}>
       <Col className="light-text" sm={{ span: 6 }} xs={{ span: 12 }}>
         {title}
       </Col>
-      <Col style={{ fontWeight: 'bold' }} sm={{ span: 18 }} xs={{ span: 12 }}>
+      <Col style={{ fontWeight: "bold" }} sm={{ span: 18 }} xs={{ span: 12 }}>
         {description}
       </Col>
     </Row>
@@ -78,9 +78,9 @@ interface IStates {
 class UserPrivateChat extends PureComponent<IProps, IStates> {
   static authenticate = true;
 
-  private readonly localVideoId = 'group-publisher';
+  private readonly localVideoId = "group-publisher";
 
-  private readonly remoteVideoContainerClassname = 'group-video-container';
+  private readonly remoteVideoContainerClassname = "group-video-container";
 
   private publisherRef;
 
@@ -99,7 +99,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
       const { query } = ctx;
       if (process.browser && query.performer) {
         return {
-          performer: JSON.parse(query.performer)
+          performer: JSON.parse(query.performer),
         };
       }
 
@@ -112,15 +112,15 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
       }
 
       return {
-        performer
+        performer,
       };
     } catch (e) {
       // const err = await Promise.resolve(e);
       if (process.browser) {
-        return Router.push('/');
+        return Router.push("/");
       }
 
-      ctx.res.writeHead && ctx.res.writeHead(302, { Location: '/' });
+      ctx.res.writeHead && ctx.res.writeHead(302, { Location: "/" });
       ctx.res.end && ctx.res.end();
       return {};
     }
@@ -134,31 +134,31 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
       total: 0,
       callTime: 0,
       paidToken: 0,
-      members: []
+      members: [],
     };
   }
 
   componentDidMount() {
     this.publisherRef = React.createRef();
     this.subscriberRef = React.createRef();
-    this.socket = this.context;
-    window.addEventListener('beforeunload', this.onbeforeunload);
-    Router.events.on('routeChangeStart', this.onbeforeunload);
+    this.socket = this.context as any;
+    window.addEventListener("beforeunload", this.onbeforeunload);
+    Router.events.on("routeChangeStart", this.onbeforeunload);
   }
 
   componentDidUpdate(prevProps: IProps) {
     const { activeConversation } = this.props;
     if (
-      activeConversation?.data?._id
-      && activeConversation !== prevProps.activeConversation
+      activeConversation?.data?._id &&
+      activeConversation !== prevProps.activeConversation
     ) {
       this.initSocketEvent();
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
-    Router.events.off('routeChangeStart', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+    Router.events.off("routeChangeStart", this.onbeforeunload);
   }
 
   handler({ total, members, conversationId }) {
@@ -166,7 +166,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
     if (activeConversation?.data?._id === conversationId) {
       this.setState({
         total,
-        members
+        members,
       });
     }
   }
@@ -179,7 +179,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
     const {
       activeConversation,
       resetStreamMessage: dispatchResetStreamMessage,
-      resetStreamConversation: dispatchResetStreamConversation
+      resetStreamConversation: dispatchResetStreamConversation,
     } = this.props;
     dispatchResetStreamMessage();
     this.socket.off(JOINED_THE_ROOM);
@@ -188,7 +188,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
     this.socket.off(MODEL_LEFT_ROOM);
     if (this.socket && activeConversation && activeConversation.data) {
       this.socket.emit(EVENT.LEAVE_ROOM, {
-        conversationId: activeConversation.data._id
+        conversationId: activeConversation.data._id,
       });
     }
 
@@ -202,7 +202,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
       processing: false,
       roomJoined: false,
       total: 0,
-      members: []
+      members: [],
     });
   }
 
@@ -210,28 +210,28 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
     const {
       performer,
       getStreamConversationSuccess: dispatchGetStreamConversationSuccess,
-      loadMoreStreamMessages: dispatchLoadStreamMessages
+      loadMoreStreamMessages: dispatchLoadStreamMessages,
     } = this.props;
     try {
       this.setState({ processing: true });
       const resp = await streamService.joinGroupChat(performer._id);
       if (resp && resp.data) {
-        this.socket = this.context;
+        this.socket = this.context as any;
         const { sessionId, conversation } = resp.data;
-        this.publisherRef.current
-          && this.publisherRef.current.start(conversation._id, sessionId);
+        this.publisherRef.current &&
+          this.publisherRef.current.start(conversation._id, sessionId);
         dispatchGetStreamConversationSuccess({
-          data: conversation
+          data: conversation,
         });
         dispatchLoadStreamMessages({
           conversationId: conversation._id,
           limit: 25,
           offset: 0,
-          type: conversation.type
+          type: conversation.type,
         });
-        message.success('Success');
+        message.success("Success");
         this.socket.emit(EVENT.JOIN_ROOM, {
-          conversationId: conversation._id
+          conversationId: conversation._id,
         });
       }
     } catch (e) {
@@ -248,7 +248,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
       this.interval = setInterval(() => {
         const { callTime } = this.state;
         if (user.balance < performer.groupCallPrice) {
-          message.warn('Your balance is not enough token.');
+          message.warn("Your balance is not enough token.");
           setTimeout(() => window.location.reload(), 10 * 1000);
           return;
         }
@@ -261,7 +261,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
         total,
         members,
         roomJoined: true,
-        callTime: 0
+        callTime: 0,
       });
     }
   }
@@ -271,13 +271,14 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
     this.subscriberRef.current && this.subscriberRef.current.stop();
 
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = "/";
     }, 10 * 1000);
   }
 
   async sendPaidToken(conversationId: string) {
     try {
-      const { performer, updateCurrentUserBalance: dispatchUpdateBalance } = this.props;
+      const { performer, updateCurrentUserBalance: dispatchUpdateBalance } =
+        this.props;
       const { paidToken } = this.state;
       await transactionService.sendPaidToken(conversationId);
       const newState = { paidToken: paidToken + performer.groupCallPrice };
@@ -286,7 +287,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
     } catch (err) {
       const error = await Promise.resolve(err);
       if (error.statusCode === 400) {
-        message.error('Your tokens do not enough, please buy more.');
+        message.error("Your tokens do not enough, please buy more.");
         clearInterval(this.interval);
         this.leave();
       }
@@ -294,7 +295,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
   }
 
   initSocketEvent() {
-    this.socket = this.context;
+    this.socket = this.context as any;
     this.socket.on(
       JOINED_THE_ROOM,
       ({ streamId, streamList, conversationId }) => {
@@ -303,70 +304,74 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
 
         this.streamId = streamId;
         this.streamList = streamList;
-        this.publisherRef.current
-          && this.publisherRef.current.publish(streamId);
+        this.publisherRef.current &&
+          this.publisherRef.current.publish(streamId);
         if (streamList.length) {
-          this.subscriberRef.current
-            && this.subscriberRef.current.play(streamList);
+          this.subscriberRef.current &&
+            this.subscriberRef.current.play(streamList);
         }
       }
     );
-    this.socket.on(STREAM_JOINED, (data: { streamId: string, conversationId: string }) => {
-      const { activeConversation } = this.props;
-      if (data.conversationId !== activeConversation.data._id) return;
+    this.socket.on(
+      STREAM_JOINED,
+      (data: { streamId: string; conversationId: string }) => {
+        const { activeConversation } = this.props;
+        if (data.conversationId !== activeConversation.data._id) return;
 
-      if (this.streamId !== data.streamId) {
-        this.subscriberRef.current && this.subscriberRef.current.play([data.streamId]);
+        if (this.streamId !== data.streamId) {
+          this.subscriberRef.current &&
+            this.subscriberRef.current.play([data.streamId]);
+        }
       }
-    });
-    this.socket.on(STREAM_LEAVED, (data: { streamId: string, conversationId: string }) => {
-      const { activeConversation } = this.props;
-      if (data.conversationId !== activeConversation.data._id) return;
+    );
+    this.socket.on(
+      STREAM_LEAVED,
+      (data: { streamId: string; conversationId: string }) => {
+        const { activeConversation } = this.props;
+        if (data.conversationId !== activeConversation.data._id) return;
 
-      this.streamList = this.streamList.filter((id) => id !== data.streamId);
-      if (this.streamId !== data.streamId) {
-        this.subscriberRef.current && this.subscriberRef.current.close(data.streamId);
+        this.streamList = this.streamList.filter((id) => id !== data.streamId);
+        if (this.streamId !== data.streamId) {
+          this.subscriberRef.current &&
+            this.subscriberRef.current.close(data.streamId);
+        }
       }
-    });
+    );
     this.socket.on(MODEL_LEFT_ROOM, (data: { conversationId: string }) => {
       const { activeConversation } = this.props;
       if (data.conversationId !== activeConversation.data._id) return;
 
-      message.error('Model has left the room. You will be redirected in 10 seconds');
+      message.error(
+        "Model has left the room. You will be redirected in 10 seconds"
+      );
       setTimeout(() => {
-        Router.push('/');
+        Router.push("/");
       }, 10000);
     });
   }
 
   render() {
     const { performer } = this.props;
-    const {
-      processing,
-      total,
-      members,
-      roomJoined,
-      callTime,
-      paidToken
-    } = this.state;
+    const { processing, total, members, roomJoined, callTime, paidToken } =
+      this.state;
 
     const dataSource = [
       {
-        title: 'Call time',
-        description: `${callTime} minute(s)`
+        title: "Call time",
+        description: `${callTime} minute(s)`,
       },
       {
-        title: 'Status',
-        description: roomJoined ? 'Live' : ''
+        title: "Status",
+        description: roomJoined ? "Live" : "",
       },
       {
-        title: 'Paid Token',
-        description: `${paidToken} token(s)`
+        title: "Paid Token",
+        description: `${paidToken} token(s)`,
       },
       {
-        title: 'Token per minute',
-        description: `${performer.groupCallPrice} token(s)` || 'N/A'
-      }
+        title: "Token per minute",
+        description: `${performer.groupCallPrice} token(s)` || "N/A",
+      },
     ];
 
     return (
@@ -410,7 +415,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
                 ref={this.publisherRef}
                 containerClassName={this.remoteVideoContainerClassname}
                 configs={{
-                  localVideoId: this.localVideoId
+                  localVideoId: this.localVideoId,
                 }}
               />
               <GroupSubscriber
@@ -418,7 +423,7 @@ class UserPrivateChat extends PureComponent<IProps, IStates> {
                 ref={this.subscriberRef}
                 containerClassName={this.remoteVideoContainerClassname}
                 configs={{
-                  isPlayMode: true
+                  isPlayMode: true,
                 }}
               />
             </Row>
@@ -449,16 +454,13 @@ const mapStateToProps = (state) => ({
   ui: state.ui,
   user: state.user.current,
   loggedIn: state.auth.loggedIn,
-  activeConversation: state.streamMessage.activeConversation
+  activeConversation: state.streamMessage.activeConversation,
 });
 const mapDispatchs = {
   getStreamConversationSuccess,
   loadMoreStreamMessages,
   resetStreamMessage,
   updateCurrentUserBalance,
-  resetStreamConversation
+  resetStreamConversation,
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchs
-)(UserPrivateChat);
+export default connect(mapStateToProps, mapDispatchs)(UserPrivateChat);

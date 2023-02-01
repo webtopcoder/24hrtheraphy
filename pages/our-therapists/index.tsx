@@ -1,26 +1,26 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { message } from 'antd';
-import PageHeader from '@components/common/layout/page-header';
-import { performerCategories } from 'src/services/perfomer-categories.service';
-import { updateUIValue } from 'src/redux/ui/actions';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import { message } from "antd";
+import PageHeader from "@components/common/layout/page-header";
+import { performerCategories } from "src/services/perfomer-categories.service";
+import { updateUIValue } from "src/redux/ui/actions";
 import {
   IPerformerCategogies,
   IResponse,
   IPerformer,
-  IPerformSearch
-} from 'src/interfaces';
-import PageBanner from '../../src/components/homepage/PageBanner';
-import Head from 'next/head';
-import PerformerGrid from '@components/performer/performer-grid';
+  IPerformSearch,
+} from "src/interfaces";
+import PageBanner from "../../src/components/homepage/PageBanner";
+import Head from "next/head";
+import PerformerGrid from "@components/performer/performer-grid";
 import {
   searchPerformer,
-  updatePerformerFavourite
-} from '@redux/performer/actions';
-import { favouriteService } from 'src/services';
-import { getResponseError } from 'src/lib';
-import { SocketContext } from 'src/socket';
-import './index.less'
+  updatePerformerFavourite,
+} from "@redux/performer/actions";
+import { favouriteService } from "src/services";
+import { getResponseError } from "src/lib";
+import { SocketContext } from "src/socket";
+import "./index.less";
 
 interface IProps {
   category: IPerformerCategogies;
@@ -46,17 +46,17 @@ interface IStates {
 const initQueryState: IPerformSearch = {
   offset: 0,
   limit: 60,
-  gender: '',
-  category: '',
-  country: '',
-  sortBy: '',
-  sort: 'desc'
+  gender: "",
+  category: "",
+  country: "",
+  sortBy: "",
+  sort: "desc",
 };
 
 class PerformerCategoryPage extends PureComponent<IProps, IStates> {
   static authenticate = false;
 
-  static layout = 'public';
+  static layout = "public";
 
   private socket;
 
@@ -64,7 +64,7 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
     try {
       if (process.browser && ctx.query.category) {
         return {
-          category: JSON.parse(ctx.query.category)
+          category: JSON.parse(ctx.query.category),
         };
       }
 
@@ -72,12 +72,11 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
         return {};
       }
 
-      const resp: IResponse<IPerformerCategogies> = await performerCategories.details(
-        ctx.query.slug
-      );
+      const resp: IResponse<IPerformerCategogies> =
+        await performerCategories.details(ctx.query.slug);
 
       return {
-        category: resp.data
+        category: resp.data,
       };
     } catch (err) {
       return {};
@@ -87,15 +86,15 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      query: initQueryState
+      query: initQueryState,
     };
   }
 
   componentDidMount() {
     this.search();
-    this.socket = this.context;
-    this.socket.on('modelUpdateStatus', this.search);
-    this.socket.on('modelUpdateStreamingStatus', this.search);
+    this.socket = this.context as any;
+    this.socket.on("modelUpdateStatus", this.search);
+    this.socket.on("modelUpdateStreamingStatus", this.search);
   }
 
   componentDidUpdate(prevProps: IProps) {
@@ -109,16 +108,17 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
   }
 
   componentWillUnmount() {
-    this.socket = this.context;
+    this.socket = this.context as any;
     if (this.socket) {
-      this.socket.off('modelUpdateStatus');
-      this.socket.off('modelUpdateStreamingStatus');
+      this.socket.off("modelUpdateStatus");
+      this.socket.off("modelUpdateStreamingStatus");
     }
   }
 
   async onLike(performer: IPerformer) {
     const { _id, isFavorite } = performer;
-    const { updatePerformerFavourite: dispatchUpdatePerformerFavourite } = this.props;
+    const { updatePerformerFavourite: dispatchUpdatePerformerFavourite } =
+      this.props;
     try {
       await favouriteService.favorite(_id, isFavorite);
       dispatchUpdatePerformerFavourite(_id);
@@ -133,8 +133,8 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
     this.setState({
       query: {
         ...query,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   }
 
@@ -143,9 +143,9 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
     const { query } = this.state;
     dispatchSearchPerformer({
       ...query,
-      category: category ? category._id : ''
+      category: category ? category._id : "",
     });
-  }
+  };
 
   render() {
     const { category, pluralTextModel } = this.props;
@@ -155,7 +155,9 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
       <>
         <Head>
           <title>
-            {category ? `Category - ${category.name}` : `Our  ${'Therapists' || 'Performers'}`}
+            {category
+              ? `Category - ${category.name}`
+              : `Our  ${"Therapists" || "Performers"}`}
             {/* {category ? `Category - ${category.name}` : `All ${pluralTextModel || 'Performers'}`} */}
           </title>
         </Head>
@@ -166,7 +168,11 @@ class PerformerCategoryPage extends PureComponent<IProps, IStates> {
           activePageText="Our Therapists"
           imgClass="bg-4"
         />
-        <PageHeader title={category ? category.name : `Our ${'Therapists' || 'Performers'}`} />
+        <PageHeader
+          title={
+            category ? category.name : `Our ${"Therapists" || "Performers"}`
+          }
+        />
         {/* <PageHeader title={category ? category.name : `All ${pluralTextModel || 'Performers'}`} /> */}
         <div className="">
           <PerformerGrid
@@ -187,8 +193,12 @@ PerformerCategoryPage.contextType = SocketContext;
 const mapStateToProps = (state) => ({
   loggedIn: state.auth.loggedIn,
   ...state.performer.performers,
-  ...state.ui
+  ...state.ui,
 });
-const mapDispatch = { searchPerformer, updatePerformerFavourite, updateUIValue };
+const mapDispatch = {
+  searchPerformer,
+  updatePerformerFavourite,
+  updateUIValue,
+};
 
 export default connect(mapStateToProps, mapDispatch)(PerformerCategoryPage);

@@ -1,6 +1,6 @@
-import React from 'react';
-import { SocketContext } from './SocketContext';
-import { warning } from './utils';
+import React from "react";
+import { SocketContext } from "./SocketContext";
+import { warning } from "./utils";
 
 interface IEventProps {
   event: string;
@@ -14,10 +14,10 @@ class Event extends React.Component<IEventProps> {
 
   componentDidMount() {
     const { event, handler } = this.props;
-    const socket = this.context;
+    const socket = this.context as any;
 
     if (!socket) {
-      warning('Socket IO connection has not been established.');
+      warning("Socket IO connection has not been established.");
       return;
     }
 
@@ -26,10 +26,10 @@ class Event extends React.Component<IEventProps> {
 
   componentWillUnmount() {
     const { event } = this.props;
-    const socket = this.context;
+    const socket = this.context as any;
 
     if (!socket) {
-      warning('Socket IO connection has not been established.');
+      warning("Socket IO connection has not been established.");
       return;
     }
 

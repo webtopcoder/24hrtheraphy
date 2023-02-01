@@ -1,18 +1,19 @@
-const lessToJS = require('less-vars-to-js');
-const fs = require('fs');
-const path = require('path');
-const withLess = require('@zeit/next-less');
-const withCSS = require('@zeit/next-css');
-const withPlugins = require('next-compose-plugins');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const lessToJS = require("less-vars-to-js");
+const fs = require("fs");
+const path = require("path");
+const withLess = require("@zeit/next-less");
+const withCSS = require("@zeit/next-css");
+const withPlugins = require("next-compose-plugins");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 // Where your antd-custom.less file lives
-const themeVariables = lessToJS(fs.readFileSync(path.resolve(__dirname, './style/default.less'), 'utf8'));
+const lessPath = path.resolve(__dirname, "./style/default.less");
+const themeVariables = lessToJS(fs.readFileSync(lessPath, "utf8"));
 
 const nextConfig = {
-  distDir: 'dist/.next',
+  distDir: "dist/.next",
   poweredByHeader: false,
-  
+
   // target: "serverless"
 };
 
@@ -21,7 +22,7 @@ const plugins = [
     // cssModules: true,
     lessLoaderOptions: {
       javascriptEnabled: true,
-      modifyVars: themeVariables // make your antd custom effective
+      modifyVars: themeVariables, // make your antd custom effective
     },
     webpack: (config, { isServer }) => {
       // it is a trick, since we have issue if import less file
@@ -36,22 +37,22 @@ const plugins = [
         config.externals = [
           (context, request, callback) => {
             if (request.match(antStyles)) return callback();
-            if (typeof origExternals[0] === 'function') {
+            if (typeof origExternals[0] === "function") {
               origExternals[0](context, request, callback);
             } else {
               callback();
             }
           },
-          ...(typeof origExternals[0] === 'function' ? [] : origExternals)
+          ...(typeof origExternals[0] === "function" ? [] : origExternals),
         ];
 
         config.module.rules.unshift({
           test: antStyles,
-          use: 'null-loader'
+          use: "null-loader",
         });
       }
       return config;
-    }
+    },
   }),
   withCSS,
 

@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
-import classnames from 'classnames';
-import Loader from '../base/loader';
-import './page.less';
+import React, { PropsWithChildren, PureComponent } from "react";
+import classnames from "classnames";
+import Loader from "../base/loader";
+import "./page.less";
 
 interface IProps {
   loading?: boolean;
@@ -9,23 +9,21 @@ interface IProps {
   inner?: boolean;
 }
 
-export default class Page extends PureComponent<IProps> {
+export default class Page extends PureComponent<PropsWithChildren<IProps>> {
   render() {
-    const {
-      className, children, loading = false, inner = true
-    } = this.props;
+    const { className, children, loading = false, inner = true } = this.props;
     const loadingStyle = {
-      height: 'calc(100vh - 184px)',
-      overflow: 'hidden'
+      height: "calc(100vh - 184px)",
+      overflow: "hidden",
     };
     return (
       <div
         className={classnames(className, {
-          contentInner: inner
+          contentInner: inner,
         })}
         style={loading ? loadingStyle : null}
       >
-        {loading ? <Loader spinning /> : ''}
+        {loading ? <Loader spinning /> : ""}
         {children}
       </div>
     );

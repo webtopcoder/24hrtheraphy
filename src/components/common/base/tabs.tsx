@@ -1,26 +1,27 @@
-import React from 'react';
-import { SizeType } from 'antd/lib/config-provider/SizeContext';
-import RcTabs, { TabsProps as RcTabsProps } from 'rc-tabs';
-import classnames from 'classnames';
+import React, { PropsWithChildren } from "react";
+import { SizeType } from "antd/lib/config-provider/SizeContext";
+import RcTabs, { TabsProps as RcTabsProps } from "rc-tabs";
+import classnames from "classnames";
 
 export interface TabsProps extends RcTabsProps {
   animated?: any;
   size?: SizeType;
 }
 
+// @ts-ignore
 export const { TabPane } = RcTabs;
 
 export const Tabs = ({
-  prefixCls = 'ant-tabs',
-  size = 'large',
+  prefixCls = "ant-tabs",
+  size = "large",
   animated = {
     inkBar: true,
-    tabPane: true
+    tabPane: true,
   },
   defaultActiveKey,
   className,
   ...props
-}: TabsProps) => {
+}: PropsWithChildren<TabsProps>) => {
   const [activeKey, setActiveKey] = React.useState(defaultActiveKey);
   const onTabClick = (key) => {
     setActiveKey(key);
