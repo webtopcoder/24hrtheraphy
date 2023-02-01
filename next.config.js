@@ -23,6 +23,7 @@ const plugins = [
     lessLoaderOptions: {
       javascriptEnabled: true,
       modifyVars: themeVariables, // make your antd custom effective
+      importLoaders: 0,
     },
     webpack: (config, { isServer }) => {
       // it is a trick, since we have issue if import less file
