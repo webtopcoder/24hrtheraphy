@@ -31,27 +31,6 @@ const MainBanner = () => {
                 className="hero-slider-wrap owl-carousel owl-theme"
                 {...options}
             >
-                <div className="slider-item slider-item-bg-6">
-                    <div className="d-table">
-                        <div className="d-table-cell">
-                            <div className="container">
-                            <div className="slider-text one">
-                                    <span className="top-title"></span>
-                                    <h1></h1>
-                                    <p></p>
-
-                                    {/* <div className="slider-btn">
-                                        <Link href="/appointment">
-                                            <a className="default-btn">
-                                                Book An Appointment
-                                            </a>
-                                        </Link>
-									</div> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div className="slider-item slider-item-bg-4">
                     <div className="d-table">
                         <div className="d-table-cell">

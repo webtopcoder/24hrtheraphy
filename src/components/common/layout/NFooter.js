@@ -41,6 +41,11 @@ const Footer = () => {
                                             </a>
                                         </li>
                                         <li>
+                                            <a href="https://www.youtube.com/@Camline24Therapy" target="_blank">
+                                                <i className="bx bxl-youtube"></i>
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="https://www.instagram.com/camline24hrtherapy/" target="_blank">
                                                 <i className="bx bxl-instagram"></i>
                                             </a>
