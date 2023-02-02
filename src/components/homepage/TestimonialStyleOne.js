@@ -82,7 +82,7 @@ const TestimonialStyleOne = () => {
 							<li><i className="bx bxs-star"></i></li>
 						</ul>	
 
-						<h3>Emily Thomas</h3>
+						<h3>Jack Holmes</h3>
 						{/* <span>Company Founder</span> */}
 					</div>
                     <div className="single-client">

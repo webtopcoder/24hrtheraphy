@@ -106,14 +106,14 @@ const Footer = () => {
                                         <a href="tel:+822456974">
                                             <i className="bx bx-phone-call"></i>
                                             <span>Hotline:</span>
-                                            Phone: +822456974
+                                            Phone: 0800 123 456
                                         </a>
                                     </li>
                                     <li>
                                         <a href="mailto:hello@corf.com">
                                             <i className="bx bx-envelope"></i>
                                             <span>Email:</span>
-                                            info@24hrtheraphy.com
+                                            info@24hrtherapy.co.uk
                                         </a>
                                     </li>
                                     <li>
@@ -134,7 +134,7 @@ const Footer = () => {
             <div className="footer-bottom-area">
                 <div className="container">
                     <div className="copy-right">
-                        <p>Copyright &copy; {currentYear} 24HOUR THERAPY &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <p>Copyright &copy; {currentYear} Camline 24hr Therapy &nbsp;&nbsp;|&nbsp;&nbsp;
                             <Link href="/privacy-policy">
                                 <a>PRIVACY POLICY</a>
                             </Link>

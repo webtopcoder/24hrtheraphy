@@ -224,12 +224,10 @@ textarea.form-control {
 
 .top-title {
   font-size: 15px;
-  color: #1b3fff;
   margin-bottom: 10px;
   display: inline-block;
   font-weight: 600;
   font-family: "Roboto", sans-serif;
-  color: #1b3fff;
 }
 
 .bg-color {
@@ -1390,9 +1388,6 @@ Doctors Area Style
   width: 50%;
 }
 
-.doctors-area .owl-item.active.center .single-doctor .top-title {
-  color: #001430;
-}
 
 .doctors-area .owl-theme .owl-nav .owl-prev {
   position: absolute;
