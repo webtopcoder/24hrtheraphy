@@ -21,11 +21,13 @@ import { loginSuccess } from "@redux/auth/actions";
 import { updateCurrentUser } from "@redux/user/actions";
 import { updateCurrentStudio } from "@redux/studio/actions";
 import { favouriteService } from "src/services";
-import { message } from "antd";
+import { Button, message } from "antd";
 import { getResponseError } from "src/lib";
 import { withRouter, NextRouter } from "next/router";
 import { SocketContext } from "src/socket";
 import Head from "next/head";
+import Link from 'next/link';
+import Router from 'next/router';
 
 interface IProps {
   router: NextRouter;
@@ -171,130 +173,57 @@ class Homepage extends PureComponent<IProps, IStates> {
         <div className="terms-conditions ptb-100">
           <div className="container">
             <div className="single-privacy">
-              <h3 className="mt-0">Online Therapy </h3>
+              <h3 className="mt-0">About Us </h3>
               <p>
-                Technological advancements have made it much easier for people
-                to receive counselling remotely. There are many benefits
-                attached to using online counsellors, particularly in these
-                difficult times with mental health being at an all-time high.
-                Let’s take a look at some of the key benefits of using online
-                therapy right now.
+                24 hour therapy is an online therapy platform made to help
+                people who are struggling mentally, emotionally and experiencing
+                behavioral concerns. You can find qualified and experienced
+                counselors and therapists anytime and anywhere according to your
+                convenience. If you or someone you know is experiencing mental
+                health, behavioral or any kind of issues or life challenges,
+                visit <Link href="/our-therapists">our therapist</Link> page to find a qualified therapist to talk
+                to.
               </p>
 
-              <h3>What is Camline therapy?</h3>
+              <h3>Our Mission</h3>
               <p>
-                Camline is an Online webcam therapy session that can be just as
-                effective as face-to-face therapy and works in much the same
-                way. It is particularly beneficial for those that live in remote
-                areas where physical therapy facilities are hard to come by.
-                When you use an online therapist, you don’t need to spend time
-                and money reaching an offline therapist and can talk freely in
-                your familiar environment. Your online therapy sessions can take
-                place whenever you want. This means you don’t have to battle the
-                wind and rain to reach your therapist. When you first start
-                talking to your therapist, they will ask you about your issue
-                and listen attentively so they can identify the best way to help
-                you. Services can be delivered as a one-off session or be spread
-                over several calls.
+                CMental Health is one of the most important aspects of our life
+                which we should take care of. Mental Health has its impacts on
+                every stage of our life, from childhood to adulthood. Everyone
+                struggles at time and needs a proper professional help to feel
+                better and do better in the life. Our core mission is to make
+                professional therapy accessible, affordable and convenient to
+                every individual, around the globe and help anyone who struggles
+                with life challenges anytime and anywhere.
               </p>
 
-              <h3>What are the benefits of online Webcam therapy?</h3>
+              <h3>Online Therapy</h3>
               <p>
-                Another benefit of online therapy is that it tends to be more
-                intense, which means you can make progress much faster. If a
-                specific counselling service is not available in your local
-                area, you can easily source it online with Camline. For
-                instance, you may need access to a particular type of treatment
-                which is only available in a remote town or city. With online
-                therapy, you don’t even need to step out of your front door to
-                receive this.
+                With the help of ever-evolving technology, it has been easier to
+                receive counselling remotely. Some people initially may find the
+                online therapy different but they very quickly get used to it.
+                The convenience and comfort of home, flexibility, security are
+                the factors that has proved that online therapy is very
+                beneficial. Being able to go talk through the problems while
+                sitting at the comfort of your own bedroom rather than
+                travelling to a more formal therapy room turns out to be more
+                refreshing. Here at 24 hour therapy, we want you to have access
+                to the right therapy according to your needs, with all the
+                comfort and convenience.
               </p>
 
-              <h3>Why do people need online therapy?</h3>
+              <h3>Our Therapist</h3>
 
               <p>
-                Many people wish to keep their counselling sessions private and
-                don’t want to be spotted visiting a physical counselling
-                service. This is yet another reason why so many people are
-                flocking to online counsellors. Online counselling is incredibly
-                convenient and can be delivered at a time that suits you,
-                wherever you are. With our 24-7-365 counselling services, you
-                don’t need to take time off work and lose earnings to get the
-                treatment and support that you require. You can receive your
-                counselling in the evening, at the weekend or even in the middle
-                of the night if you wish.
+                24 hour therapy being an online therapy platform offers access
+                to licensed, skilled and experienced psychologists.
               </p>
-              <h3>How does online therapy work?</h3>
-
-              <p>
-                We deliver webcam based online therapy the goal is always the
-                same to assess your needs and help you overcome whatever is
-                troubling you so you can lead a more fulfilling life. Therapy
-                can be provided via chat or live chat if you’d rather not
-                express your feelings verbally. When you have your therapist’s
-                comments laid out in front of you, it may be easier to remember
-                what they have said to you. Online therapy is also great for
-                counsellors – as they don’t need to spend several hours each
-                week travelling to and from the office and visiting clients in
-                person, they can spend more time on helping their clients.
-              </p>
-              <h3>Why do people use online webcam counselling?</h3>
-
-              <p>
-                It can be very comforting to know that help is available no
-                matter where you are located. With camline online therapy,
-                counselling can continue even if you are on holiday, ill or
-                can’t get to a counsellor or therapist’s office for any other
-                reason. What’s also great about online therapy is that you can
-                get access to support instantly, without waiting to move up a
-                lengthy waiting list.
-              </p>
-              <h3>Get support from an online therapist today</h3>
-
-              <p>
-                At Camline 24hr Therapy, we are passionate about delivering the
-                best possible care we can. Our therapists are fully trained,
-                qualified and DBS-checked. Experts in their fields, they use the
-                latest technology to deliver 24-hour care to anyone who needs
-                help with life’s ongoing challenges. There’s no need to worry
-                about bookings or to wait for doctor referrals. login at any
-                time from anywhere in the world. We offer a secure, confidential
-                service that’s as easy to use as it is effective.
-              </p>
-
-              <h3>Seeking online therapy services?</h3>
-
-              <p>
-                We specialise in a host of areas, with therapists assigned to
-                the fields they are most experienced in. Areas include
-                bereavement, career, couples, divorce, family, marriage,
-                sexuality and work stress counselling. If you have any unused
-                minutes left once a session comes to an end, you won’t lose
-                these. Once your time is complete, you can either stay connected
-                for as long as you want or easily rebook using the online
-                booking form.{" "}
-              </p>
-
-              <h3>The importance of therapy</h3>
-
-              <p>
-                Many people use therapy to overcome mental and emotional
-                challenges. If your thoughts and feelings are starting to
-                interfere with your everyday life, don’t be afraid to ask for
-                help. Our therapists can help you gain a better perspective and
-                make you more equipped to deal with everything life throws at
-                you at work, home or anywhere else. Our services can guide you
-                through difficult periods in your life, improve friendships,
-                relationships and enhance your enjoyment of day-to-day life.
-                Remember, asking for support does not mean you are failing.
-                Today, there is much more awareness about mental health, with
-                people from all walks of life benefiting from professional
-                counselling and therapy.
-              </p>
-              <p>
-                To learn more about our online therapy services and how they can
-                benefit you, contact Camline 24hr Therapy today.
-              </p>
+              <Button
+                  type="primary"
+                  onClick={() => Router.push('/our-therapists')}
+                >
+                  Find a therapist
+                </Button>
             </div>
           </div>
         </div>
