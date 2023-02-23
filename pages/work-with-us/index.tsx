@@ -1,44 +1,90 @@
-import { IUIConfig } from "src/interfaces";
+import { ICountries, IPerformerCategogies, IRegisterFormData, IUIConfig } from "src/interfaces";
 import "./index.less";
+import moment from "moment";
 import { connect } from "react-redux";
 import Head from "next/head";
+import { performerRegister } from "@redux/auth/actions";
+import { updateUIValue } from "src/redux/ui/actions";
+import { updateCurrentStudio } from "@redux/studio/actions";
+import { loginSuccess } from "@redux/auth/actions";
+import {
+  searchPerformer,
+  updatePerformerFavourite,
+  updateCurrentPerformer,
+} from "@redux/performer/actions";
+import { updateCurrentUser } from "@redux/user/actions";
 import {
   Row,
   Col,
   Button,
   Modal,
   Steps,
-  message,
   Radio,
+  message,
   Space,
   Input,
+  InputRef,
 } from "antd";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
+import ProfessionalRegister from "@components/auth/register/ProfessionalRegister";
+import { settingService } from "@services/setting.service";
+import { useRouter } from "next/router";
 
 interface IProps {
   ui: IUIConfig;
   settings?: any;
+  submiting: boolean;
+  performerRegister(data: IRegisterFormData): Function;
 }
 
-const RegisterForm = () => {
-  return <p>This is a register form.</p>;
-};
+function Homepage({ settings, ui, performerRegister, submiting }: IProps) {
+  const router = useRouter();
+  const initialCountries = [
+    {
+      name: "",
+      code: "",
+      flag: "",
+    },
+  ];
+  const [countries, setCountries] = useState(initialCountries);
 
-function Homepage({ settings, ui }: IProps) {
+  useEffect(() => {
+    const getCountries = async () => {
+      try {
+        const countries = await settingService.getCountries();
+        setCountries(countries.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCountries();
+  }, []);
+
+  const onFinish = (data: IRegisterFormData) => {
+    let newData = { ...data };
+    if (data.dateOfBirth) {
+      newData = {
+        ...data,
+        dateOfBirth: moment(data.dateOfBirth).toISOString(),
+      };
+    }
+    performerRegister(newData);
+    message.success("Registered succesfully.");
+    router.push("/auth/login/performer");
+  };
+
   const otherRef = useRef([]);
-  otherRef.current = [];
 
-  const addToRefs: (el) => void = (el) => {
+  const addToRefs: (el: Ref<HTMLElement>) => void = (el) => {
     if (el && !otherRef.current.includes(el)) {
       otherRef.current.push(el);
     }
   };
 
   const inputRef = useRef([]);
-  inputRef.current = [];
 
-  const addToInputRefs: (el) => void = (el) => {
+  const addToInputRefs: (el: InputRef) => void = (el) => {
     if (el && !inputRef.current.includes(el)) {
       inputRef.current.push(el);
     }
@@ -112,7 +158,15 @@ function Homepage({ settings, ui }: IProps) {
     },
     {
       title: "Form",
-      content: <RegisterForm />,
+      content: (
+        <ProfessionalRegister
+          onFinish={onFinish}
+          submiting={submiting}
+          countries={countries}
+          googleReCaptchaEnabled={ui.googleReCaptchaEnabled}
+          googleReCaptchaSiteKey={ui.googleReCaptchaSiteKey}
+        />
+      ),
     },
   ];
 
@@ -131,14 +185,9 @@ function Homepage({ settings, ui }: IProps) {
   };
 
   const [radioValue, setRadioValue] = useState("");
-  const initialFormValues = [
-    {
-      answer: "",
-    },
-  ];
-  const [formValues, setFormValues] = useState(initialFormValues);
+
+  const [formValues, setFormValues] = useState([]);
   const onChange = (e) => {
-    console.log("radio checked", e.target.value);
     setRadioValue(e.target.value);
   };
 
@@ -148,11 +197,14 @@ function Homepage({ settings, ui }: IProps) {
       const inputValue = inputRef?.current[i]?.input?.value;
       if (otherRef?.current[i]?.input?.checked) {
         if (checkedValue === "Other") {
-          setFormValues((prevState) => [...prevState, { answer: inputValue }]);
+          setFormValues((prevState) => [
+            ...prevState,
+            { [steps[current].question]: inputValue },
+          ]);
         } else {
           setFormValues((prevState) => [
             ...prevState,
-            { answer: checkedValue },
+            { [steps[current].question]: checkedValue },
           ]);
         }
       }
@@ -314,7 +366,7 @@ function Homepage({ settings, ui }: IProps) {
       </div>
       <Modal
         centered
-        width="1200px"
+        width="1000px"
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         okButtonProps={{
@@ -332,13 +384,7 @@ function Homepage({ settings, ui }: IProps) {
             current={current}
             items={items}
           />
-
-          <div
-            style={{
-              marginBottom: "3rem",
-              marginTop: "3rem",
-            }}
-          >
+          <div style={{ marginTop: `3rem` }}>
             {steps[current]?.question ? (
               <h5>Q. {steps[current]?.question}</h5>
             ) : (
@@ -371,16 +417,12 @@ function Homepage({ settings, ui }: IProps) {
               </Space>
             </Radio.Group>
           </div>
-          <div
-            style={{
-              marginTop: 24,
-            }}
-          >
+          <div>
             {current < steps.length - 1 && (
               <Button
                 className="modal-cta-button"
                 type="primary"
-                style={{ height: `50px` }}
+                style={{ height: `50px`, width: `100%`, marginTop: `2rem` }}
                 onClick={handleNextClick}
               >
                 Next
@@ -389,22 +431,23 @@ function Homepage({ settings, ui }: IProps) {
             {current === steps.length - 1 && (
               <Button
                 className="modal-cta-button"
-                type="primary"
-                style={{ height: `50px` }}
-                onClick={() => {
-                  message.success("Processing complete!");
-                  formValues.shift();
-                  console.log(formValues);
+                style={{
+                  height: `50px`,
+                  width: `100%`,
                 }}
+                onClick={() => prev()}
               >
-                Done
+                Previous
               </Button>
             )}
-            {current > 0 && (
+
+            {current > 0 && current < steps.length - 1 && (
               <Button
                 className="modal-cta-button"
                 style={{
                   height: `50px`,
+                  width: `100%`,
+                  marginTop: `1rem`,
                 }}
                 onClick={() => prev()}
               >
@@ -420,7 +463,10 @@ function Homepage({ settings, ui }: IProps) {
 
 const mapStateToProps = (state) => ({
   ui: { ...state.ui },
-  settings: state.settings,
+  loggedIn: state.auth.loggedIn,
+  ...state.auth.performerRegister,
 });
-
-export default connect(mapStateToProps)(Homepage);
+const mapDispatchs = {
+  performerRegister,
+};
+export default connect(mapStateToProps, mapDispatchs)(Homepage);
